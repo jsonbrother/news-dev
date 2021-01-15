@@ -1,6 +1,6 @@
-package com.user.comtroller;
+package com.user.controller;
 
-import com.api.comtroller.user.HelloControllerApi;
+import com.api.controller.user.HelloControllerApi;
 import com.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
