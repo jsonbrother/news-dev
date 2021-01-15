@@ -1,6 +1,7 @@
 package com.user.comtroller;
 
 import com.api.comtroller.user.HelloControllerApi;
+import com.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +17,9 @@ public class HelloController implements HelloControllerApi {
 
     public Object hello() {
 
-        logger.debug("debug: hello~");
         logger.info("info: hello~");
-        logger.warn("warn: hello~");
-        logger.error("error: hello~");
 
-        return "hello";
+        return ResultUtil.success();
     }
 
 }
