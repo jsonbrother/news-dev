@@ -1,6 +1,6 @@
 package com.user.comtroller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.api.comtroller.user.HelloControllerApi;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
  * 2021/1/15 11:28
  */
 @RestController
-public class HelloController {
+public class HelloController implements HelloControllerApi {
 
-    @GetMapping("/hello")
     public Object hello() {
         return "hello";
     }
