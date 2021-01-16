@@ -2,7 +2,16 @@
   <dictionary name="Json">
     <words>
       <w>aliyun</w>
+      <w>hdel</w>
+      <w>hget</w>
+      <w>hgetall</w>
+      <w>hset</w>
+      <w>lpop</w>
+      <w>lpush</w>
+      <w>mget</w>
+      <w>nginx</w>
       <w>pagehelper</w>
+      <w>rpush</w>
     </words>
   </dictionary>
 </component>
