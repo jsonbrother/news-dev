@@ -48,7 +48,9 @@ public class SMSUtils {
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());
-        } catch (ClientException e) {
+        } catch (ServerException e) {
+            e.printStackTrace();
+        }catch (ClientException e) {
             e.printStackTrace();
         }
     }
