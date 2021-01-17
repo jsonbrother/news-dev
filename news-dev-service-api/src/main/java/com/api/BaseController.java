@@ -4,6 +4,10 @@ import com.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +21,10 @@ public class BaseController {
     protected RedisOperator redis;
 
     protected static final String MOBILE_SMSCODE = "mobile:smscode";
+    protected static final String REDIS_USER_TOKEN = "redis_user_token";
+
+    protected static final Integer MOBILE_SMSCODE_EXPIRE = 30 * 60; // 半个小时
+    protected static final Integer COOKIE_EXPIRE = 30 * 24 * 60 * 60; // 一个月
 
     /**
      * 获取BO中的错误信息
@@ -33,5 +41,38 @@ public class BaseController {
         });
 
         return map;
+    }
+
+    /**
+     * 设置cookie value编码utf-8
+     *
+     * @param response 请求对象
+     * @param name     cookie的key
+     * @param value    cookie的值
+     * @param maxAge   过期时间
+     */
+    protected void setCookie(HttpServletResponse response, String name, String value, Integer maxAge) {
+        try {
+            value = URLEncoder.encode(value, "utf-8");
+            setCookieValue(response, name, value, maxAge);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 设置cookie
+     *
+     * @param response 请求对象
+     * @param name     cookie的key
+     * @param value    cookie的值
+     * @param maxAge   过期时间
+     */
+    private void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        // cookie.setDomain("news.com"); // 设置在具体域名之下
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }

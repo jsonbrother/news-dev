@@ -2,7 +2,6 @@ package com.user.controller;
 
 import com.api.BaseController;
 import com.api.controller.user.PassportControllerApi;
-import com.constant.RedisConstant;
 import com.enums.ResponseStatusEnum;
 import com.enums.UserStatus;
 import com.pojo.AppUser;
@@ -20,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by TongHaiJun
@@ -58,13 +59,17 @@ public class PassportController extends BaseController implements PassportContro
         logger.info("用户手机号:{},ip地址:{},短信验证码:{}", mobile, userIp, random);
 
         // 4.把验证码存入redis 用于后续进行验证
-        redis.set(MOBILE_SMSCODE + ":" + mobile, random, RedisConstant.EXPIRE);
+        redis.set(MOBILE_SMSCODE + ":" + mobile, random, MOBILE_SMSCODE_EXPIRE);
+
 
         return NewsJSONResult.success();
     }
 
     @Override
-    public NewsJSONResult doLogin(@Valid RegistLoginBO registLoginBO, BindingResult result) {
+    public NewsJSONResult doLogin(@Valid RegistLoginBO registLoginBO,
+                                  BindingResult result,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) {
 
         // 1.判断BindingResult中是否保存了错误的验证信息
         if (result.hasErrors()) {
@@ -91,7 +96,23 @@ public class PassportController extends BaseController implements PassportContro
             appUser = userService.saveAppUser(mobile);
         }
 
-        return NewsJSONResult.success(appUser);
+        // 4.保存用户会话的相关信息
+        Integer userActiveStatus = appUser.getActiveStatus();
+        if (!userActiveStatus.equals(UserStatus.FROZEN.type)) {
+            // 保存token到redis
+            String uToken = UUID.randomUUID().toString();
+            redis.set(REDIS_USER_TOKEN + ":" + appUser.getId(), uToken);
+
+            // 保存用户id和token到cookie
+            setCookie(response, "uid", appUser.getId(), COOKIE_EXPIRE);
+            setCookie(response, "utoken", uToken, COOKIE_EXPIRE);
+        }
+
+        // 5.用户登陆或注册成功 需要删除redis中的短信验证码
+        redis.del(MOBILE_SMSCODE + ":" + mobile);
+
+        // 6.返回用户的状态码
+        return NewsJSONResult.success(userActiveStatus);
     }
 
 }
