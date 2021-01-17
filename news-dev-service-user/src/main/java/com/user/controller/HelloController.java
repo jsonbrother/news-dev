@@ -2,7 +2,7 @@ package com.user.controller;
 
 import com.api.controller.user.HelloControllerApi;
 import com.utils.RedisOperator;
-import com.utils.ResultUtil;
+import com.result.NewsJSONResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,12 @@ public class HelloController implements HelloControllerApi {
 
     public Object hello() {
         logger.info("info: hello~");
-        return ResultUtil.success();
+        return NewsJSONResult.success();
     }
 
     @Override
     public Object redis() {
         redis.set("name", "TongHaiJun");
-        return ResultUtil.success(redis.get("name"));
+        return NewsJSONResult.success(redis.get("name"));
     }
 }

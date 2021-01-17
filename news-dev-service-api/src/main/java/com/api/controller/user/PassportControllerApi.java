@@ -1,6 +1,6 @@
 package com.api.controller.user;
 
-import com.utils.ResultUtil;
+import com.result.NewsJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,6 @@ public interface PassportControllerApi {
 
     @ApiOperation(value = "获得短信验证码", notes = "获得短信验证码", httpMethod = "GET")
     @GetMapping("/getSMSCode")
-    ResultUtil getSMSCode(String mobile, HttpServletRequest request);
+    NewsJSONResult getSMSCode(String mobile, HttpServletRequest request);
 
 }

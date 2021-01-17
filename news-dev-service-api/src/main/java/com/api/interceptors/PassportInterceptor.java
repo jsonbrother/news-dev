@@ -1,5 +1,7 @@
 package com.api.interceptors;
 
+import com.enums.ResponseStatusEnum;
+import com.exception.NewsException;
 import com.utils.IPUtil;
 import com.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,7 @@ public class PassportInterceptor implements HandlerInterceptor {
 
         // 3.存在则拦截
         if (keyIsExist) {
-            // TODO 待优化 返回错误信息
-            System.out.println("用户ip：" + userIp + "短信发送频率太快");
+            NewsException.display(ResponseStatusEnum.SMS_NEED_WAIT_ERROR);
             return false;
         }
 

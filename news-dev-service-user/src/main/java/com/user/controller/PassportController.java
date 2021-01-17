@@ -4,7 +4,7 @@ import com.api.BaseController;
 import com.api.controller.user.PassportControllerApi;
 import com.constant.RedisConstant;
 import com.utils.IPUtil;
-import com.utils.ResultUtil;
+import com.result.NewsJSONResult;
 import com.utils.SMSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class PassportController extends BaseController implements PassportContro
     }
 
     @Override
-    public ResultUtil getSMSCode(String mobile, HttpServletRequest request) {
+    public NewsJSONResult getSMSCode(String mobile, HttpServletRequest request) {
 
         // 1.获取用户ip
         String userIp = IPUtil.getRequestIp(request);
@@ -49,6 +49,6 @@ public class PassportController extends BaseController implements PassportContro
         // 4.把验证码存入redis 用于后续进行验证
         redis.set(MOBILE_SMSCODE + ":" + mobile, random, RedisConstant.EXPIRE);
 
-        return ResultUtil.success();
+        return NewsJSONResult.success();
     }
 }
