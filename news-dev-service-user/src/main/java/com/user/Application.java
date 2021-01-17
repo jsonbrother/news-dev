@@ -11,7 +11,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  */
 @SpringBootApplication
 @MapperScan(basePackages = "com.user.mapper")
-@ComponentScan("com")
+@ComponentScan(basePackages = {"com", "org.n3r.idworker"})
 public class Application {
 
     public static void main(String[] args) {
