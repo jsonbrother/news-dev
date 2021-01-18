@@ -23,6 +23,7 @@ public class BaseController {
 
     protected static final String MOBILE_SMSCODE = "mobile:smscode";
     protected static final String REDIS_USER_TOKEN = "redis_user_token";
+    protected static final String REDIS_USER_INFO = "redis_user_info";
 
     @Value("${website.domain-name}")
     private String DOMAIN_NAME;

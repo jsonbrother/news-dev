@@ -9,6 +9,7 @@ import com.pojo.vo.AppUserVO;
 import com.pojo.vo.UserAccountInfoVO;
 import com.result.NewsJSONResult;
 import com.user.service.IUserService;
+import com.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +86,19 @@ public class UserController extends BaseController implements UserControllerApi 
     }
 
     private AppUser getUser(String userId) {
-        // TODO 本方法后续公用 并且扩展
-        return userService.getAppUser(userId);
+        // 查询判断redis中是否存在该用户信息
+        String userJson = redis.get(REDIS_USER_INFO + ":" + userId);
+
+        AppUser appUser;
+        if (StringUtils.isNotBlank(userJson)) {
+            appUser = JsonUtils.jsonToPojo(userJson, AppUser.class);
+        } else {
+            appUser = userService.getAppUser(userId);
+            // 数据存入redis中
+            redis.set(REDIS_USER_INFO + ":" + userId, JsonUtils.objectToJson(appUser));
+        }
+
+        return appUser;
     }
 
 }

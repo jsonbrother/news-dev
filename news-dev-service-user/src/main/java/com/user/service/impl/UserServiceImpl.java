@@ -10,6 +10,8 @@ import com.user.mapper.AppUserMapper;
 import com.user.service.IUserService;
 import com.utils.DateUtil;
 import com.utils.DesensitizationUtil;
+import com.utils.JsonUtils;
+import com.utils.RedisOperator;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,16 @@ public class UserServiceImpl implements IUserService {
 
     private final AppUserMapper appUserMapper;
     private final Sid sid;
+    private final RedisOperator redis;
+
+
+    private static final String REDIS_USER_INFO = "redis_user_info";
 
     @Autowired
-    public UserServiceImpl(AppUserMapper appUserMapper, Sid sid) {
+    public UserServiceImpl(AppUserMapper appUserMapper, Sid sid, RedisOperator redis) {
         this.appUserMapper = appUserMapper;
         this.sid = sid;
+        this.redis = redis;
     }
 
 
@@ -74,6 +81,8 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void updateAppUserInfo(UpdateUserInfoBO userInfoBO) {
 
+        String userId = userInfoBO.getId();
+
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(userInfoBO, appUser);
 
@@ -81,8 +90,13 @@ public class UserServiceImpl implements IUserService {
         appUser.setActiveStatus(UserStatus.ACTIVE.type);
 
         int result = appUserMapper.updateByPrimaryKeySelective(appUser);
-        if (result != 1) {
+        if (result != 1) { // 通过影响条数判断是否更新成功
             NewsException.display(ResponseStatusEnum.USER_UPDATE_ERROR);
         }
+
+        // 更新redis中的用户信息
+        AppUser user = getAppUser(userId);
+        // 数据存入redis中
+        redis.set(REDIS_USER_INFO + ":" + userId, JsonUtils.objectToJson(user));
     }
 }
