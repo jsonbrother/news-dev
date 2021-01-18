@@ -1,13 +1,17 @@
 package com.user.service.impl;
 
+import com.enums.ResponseStatusEnum;
 import com.enums.Sex;
 import com.enums.UserStatus;
+import com.exception.NewsException;
 import com.pojo.AppUser;
+import com.pojo.bo.UpdateUserInfoBO;
 import com.user.mapper.AppUserMapper;
 import com.user.service.IUserService;
 import com.utils.DateUtil;
 import com.utils.DesensitizationUtil;
 import org.n3r.idworker.Sid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +44,6 @@ public class UserServiceImpl implements IUserService {
         return appUserMapper.selectOneByExample(userExample);
     }
 
-    // TODO 待优化 统一事务管理
     @Transactional
     @Override
     public AppUser saveAppUser(String mobile) {
@@ -61,5 +64,25 @@ public class UserServiceImpl implements IUserService {
         appUserMapper.insert(appUser);
 
         return appUser;
+    }
+
+    @Override
+    public AppUser getAppUser(String userId) {
+        return appUserMapper.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public void updateAppUserInfo(UpdateUserInfoBO userInfoBO) {
+
+        AppUser appUser = new AppUser();
+        BeanUtils.copyProperties(userInfoBO, appUser);
+
+        appUser.setUpdatedTime(new Date());
+        appUser.setActiveStatus(UserStatus.ACTIVE.type);
+
+        int result = appUserMapper.updateByPrimaryKeySelective(appUser);
+        if (result != 1) {
+            NewsException.display(ResponseStatusEnum.USER_UPDATE_ERROR);
+        }
     }
 }

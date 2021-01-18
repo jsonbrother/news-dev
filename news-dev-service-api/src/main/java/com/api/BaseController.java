@@ -2,6 +2,7 @@ package com.api;
 
 import com.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.Cookie;
@@ -22,6 +23,9 @@ public class BaseController {
 
     protected static final String MOBILE_SMSCODE = "mobile:smscode";
     protected static final String REDIS_USER_TOKEN = "redis_user_token";
+
+    @Value("${website.domain-name}")
+    private String DOMAIN_NAME;
 
     protected static final Integer MOBILE_SMSCODE_EXPIRE = 30 * 60; // 半个小时
     protected static final Integer COOKIE_EXPIRE = 30 * 24 * 60 * 60; // 一个月
@@ -71,7 +75,7 @@ public class BaseController {
     private void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
-        // cookie.setDomain("news.com"); // 设置在具体域名之下
+        cookie.setDomain(DOMAIN_NAME); // 设置在具体域名之下
         cookie.setPath("/");
         response.addCookie(cookie);
     }

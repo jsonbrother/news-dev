@@ -3,6 +3,8 @@ package com.pojo.bo;
 import javax.validation.constraints.NotBlank;
 
 /**
+ * 用户登陆注册BO对象
+ * <p>
  * Created by TongHaiJun
  * 2021/1/17 9:44
  */

@@ -7,3 +7,7 @@ spring:
     host: 121.4.149.240
     port: 6379
     password: redis123
+
+# 设置域名
+website:
+  domain-name: news.com

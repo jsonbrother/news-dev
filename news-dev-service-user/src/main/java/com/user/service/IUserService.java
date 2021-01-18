@@ -1,6 +1,7 @@
 package com.user.service;
 
 import com.pojo.AppUser;
+import com.pojo.bo.UpdateUserInfoBO;
 
 /**
  * Created by TongHaiJun
@@ -22,4 +23,16 @@ public interface IUserService {
      */
     AppUser saveAppUser(String mobile);
 
+    /***
+     * 根据userId获得账户信息
+     * @param userId userId
+     * @return appUser
+     */
+    AppUser getAppUser(String userId);
+
+    /***
+     * 修改完善用户信息并激活
+     * @param userInfoBO 用户信息
+     */
+    void updateAppUserInfo(UpdateUserInfoBO userInfoBO);
 }
