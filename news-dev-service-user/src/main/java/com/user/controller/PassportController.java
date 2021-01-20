@@ -9,6 +9,7 @@ import com.pojo.bo.RegistLoginBO;
 import com.user.service.IUserService;
 import com.utils.IPUtil;
 import com.result.NewsJSONResult;
+import com.utils.JsonUtils;
 import com.utils.SMSUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -102,6 +103,7 @@ public class PassportController extends BaseController implements PassportContro
             // 保存token到redis
             String uToken = UUID.randomUUID().toString();
             redis.set(REDIS_USER_TOKEN + ":" + appUser.getId(), uToken);
+            redis.set(REDIS_USER_INFO + ":" + appUser.getId(), JsonUtils.objectToJson(appUser));
 
             // 保存用户id和token到cookie
             setCookie(response, "uid", appUser.getId(), COOKIE_EXPIRE);

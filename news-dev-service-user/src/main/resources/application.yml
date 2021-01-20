@@ -23,7 +23,7 @@ spring:
   datasource:                                         # 数据源的相关配置
     type: com.zaxxer.hikari.HikariDataSource          # 数据源类型：HikariCP
     driver-class-name: com.mysql.jdbc.Driver          # mysql驱动
-    url: jdbc:mysql://123.57.5.118:3306/news-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://121.4.149.240:3306/news-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
     password: News@2021
     hikari:
