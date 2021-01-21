@@ -30,6 +30,7 @@ public class BaseController {
 
     protected static final Integer MOBILE_SMSCODE_EXPIRE = 30 * 60; // 半个小时
     protected static final Integer COOKIE_EXPIRE = 30 * 24 * 60 * 60; // 一个月
+    protected static final Integer COOKIE_DELETE = 0;
 
     /**
      * 获取BO中的错误信息

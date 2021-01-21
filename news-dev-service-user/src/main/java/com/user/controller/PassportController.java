@@ -117,4 +117,16 @@ public class PassportController extends BaseController implements PassportContro
         return NewsJSONResult.success(userActiveStatus);
     }
 
+    @Override
+    public NewsJSONResult logout(String userId, HttpServletRequest request, HttpServletResponse response) {
+
+        // 1.清除redis中的用户信息
+        redis.del(REDIS_USER_TOKEN + ":" + userId);
+
+        // 2.清楚cookie中的用户信息
+        setCookie(response, "uid", "", COOKIE_DELETE);
+        setCookie(response, "utoken", "", COOKIE_DELETE);
+
+        return NewsJSONResult.success();
+    }
 }
