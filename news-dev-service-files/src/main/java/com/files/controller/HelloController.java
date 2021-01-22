@@ -1,11 +1,9 @@
-package com.user.controller;
+package com.files.controller;
 
 import com.api.controller.user.HelloControllerApi;
-import com.utils.RedisOperator;
 import com.result.NewsJSONResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,13 +15,7 @@ public class HelloController implements HelloControllerApi {
 
     private final static Logger logger = LoggerFactory.getLogger(HelloController.class);
 
-    private final RedisOperator redis;
-
-    @Autowired
-    public HelloController(RedisOperator redis) {
-        this.redis = redis;
-    }
-
+    @Override
     public Object hello() {
         logger.info("info: hello~");
         return NewsJSONResult.success();
@@ -31,7 +23,7 @@ public class HelloController implements HelloControllerApi {
 
     @Override
     public Object redis() {
-        redis.set("name", "TongHaiJun");
-        return NewsJSONResult.success(redis.get("name"));
+        return null;
     }
+
 }

@@ -20,7 +20,12 @@ public enum ResponseStatusEnum {
     SMS_CODE_ERROR(506, false, "验证码过期或不匹配，请稍后再试！"),
     USER_FROZEN(507, false, "用户已被冻结，请联系管理员！"),
     USER_UPDATE_ERROR(508, false, "用户信息更新失败，请联系管理员！"),
-    USER_INACTIVE_ERROR(509, false, "请前往[账号设置]修改信息激活后再进行后续操作！");
+    USER_INACTIVE_ERROR(509, false, "请前往[账号设置]修改信息激活后再进行后续操作！"),
+    FILE_UPLOAD_NULL_ERROR(510, false, "文件不能为空，请选择一个文件再上传！"),
+    FILE_UPLOAD_FAILD(511, false, "文件上传失败！"),
+    FILE_FORMATTER_FAILD(512, false, "文件图片格式不支持！"),
+    FILE_MAX_SIZE_ERROR(513, false, "仅支持500kb大小以下的图片上传！"),
+    FILE_NOT_EXIST_ERROR(514, false, "你所查看的文件不存在！");
 
 
     // 响应业务状态

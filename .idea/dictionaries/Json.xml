@@ -2,10 +2,13 @@
   <dictionary name="Json">
     <words>
       <w>aliyun</w>
+      <w>fastdfs</w>
+      <w>fdfs</w>
       <w>hdel</w>
       <w>hget</w>
       <w>hgetall</w>
       <w>hset</w>
+      <w>idworker</w>
       <w>lpop</w>
       <w>lpush</w>
       <w>mget</w>

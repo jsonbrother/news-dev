@@ -26,7 +26,7 @@ public class BaseInterceptor {
                 NewsException.display(ResponseStatusEnum.UN_LOGIN);
                 return false;
             } else {
-                if (redisToken.equalsIgnoreCase(token)) {
+                if (!redisToken.equalsIgnoreCase(token)) {
                     NewsException.display(ResponseStatusEnum.TICKET_INVALID);
                     return false;
                 }

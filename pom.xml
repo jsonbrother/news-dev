@@ -12,6 +12,7 @@
         <module>news-dev-common</module>
         <module>news-dev-service-api</module>
         <module>news-dev-service-user</module>
+        <module>news-dev-service-files</module>
     </modules>
 
     <!--

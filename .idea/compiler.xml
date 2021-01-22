@@ -9,6 +9,7 @@
         <module name="news-dev-common" />
         <module name="news-dev-model" />
         <module name="news-dev-service-api" />
+        <module name="news-dev-service-files" />
         <module name="news-dev-service-user" />
       </profile>
     </annotationProcessing>
@@ -18,6 +19,7 @@
       <module name="news-dev-common" options="-parameters" />
       <module name="news-dev-model" options="-parameters" />
       <module name="news-dev-service-api" options="-parameters" />
+      <module name="news-dev-service-files" options="-parameters" />
       <module name="news-dev-service-user" options="-parameters" />
     </option>
   </component>

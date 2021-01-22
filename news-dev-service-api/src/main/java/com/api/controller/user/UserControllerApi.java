@@ -16,7 +16,7 @@ import javax.validation.Valid;
  * Created by TongHaiJun
  * 2021/1/18 11:57
  */
-@Api(value = "用户信息相关controller", tags = "用户信息相关controller")
+@Api(value = "用户信息相关Controller", tags = "用户信息相关Controller")
 @RequestMapping("/user")
 public interface UserControllerApi {
 
