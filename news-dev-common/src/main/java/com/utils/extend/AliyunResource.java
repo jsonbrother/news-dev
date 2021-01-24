@@ -5,6 +5,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
+ * 阿里云的密钥
+ * <p>
  * Created by TongHaiJun
  * 2021/1/16 8:38
  */

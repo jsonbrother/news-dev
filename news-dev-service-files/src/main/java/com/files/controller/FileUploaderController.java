@@ -6,6 +6,7 @@ import com.enums.ResponseStatusEnum;
 import com.files.resource.FileResource;
 import com.files.service.UploaderService;
 import com.result.NewsJSONResult;
+import com.utils.extend.AliImageReviewUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +25,13 @@ public class FileUploaderController implements FileUploaderControllerApi {
 
     private final UploaderService uploaderService;
     private final FileResource fileResource;
+    private final AliImageReviewUtils aliImageReviewUtils;
 
     @Autowired
-    public FileUploaderController(UploaderService uploaderService, FileResource fileResource) {
+    public FileUploaderController(UploaderService uploaderService, FileResource fileResource, AliImageReviewUtils aliImageReviewUtils) {
         this.uploaderService = uploaderService;
         this.fileResource = fileResource;
+        this.aliImageReviewUtils = aliImageReviewUtils;
     }
 
     @Override
@@ -72,7 +75,36 @@ public class FileUploaderController implements FileUploaderControllerApi {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_FAILD);
         }
 
+        // return NewsJSONResult.success(doAliImageReview(finalPath));
         return NewsJSONResult.success(finalPath);
+    }
+
+
+    private static final String FAILED_IMAGE_URL = "file:/E:/idea%20product/faild.jpeg";
+
+    // 阿里云图片自动审核
+    private String doAliImageReview(String pendingImageUrl) {
+
+        /*
+          fastdfs 默认存在于内网，无法被阿里云内容管理服务检查到
+          需要配置到公网才行：
+          1. 内网穿透，natppp/花生壳/ngrok
+          2. 路由配置端口映射
+          3. fdfs 发布到云服务器
+         */
+        boolean result = false;
+
+        try {
+            result = aliImageReviewUtils.reviewImage(pendingImageUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (!result) {
+            return FAILED_IMAGE_URL;
+        }
+
+        return pendingImageUrl;
     }
 
 }
