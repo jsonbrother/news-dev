@@ -34,7 +34,6 @@ public class FileUploaderController implements FileUploaderControllerApi {
     @Override
     public NewsJSONResult uploadFace(String userId, MultipartFile file) throws Exception {
 
-        String path;
 
         // 1.判断参数 不能为空
         if (StringUtils.isBlank(userId)) {
@@ -43,6 +42,7 @@ public class FileUploaderController implements FileUploaderControllerApi {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_NULL_ERROR);
         }
 
+        String path;
         // 2.获得文件上传的名称
         String fileName = file.getOriginalFilename();
         if (StringUtils.isNotBlank(fileName)) {
@@ -55,7 +55,8 @@ public class FileUploaderController implements FileUploaderControllerApi {
             }
 
             // 3.执行上传
-            path = uploaderService.uploadFdfs(file, suffix);
+            // path = uploaderService.uploadFdfs(file, suffix);
+            path = uploaderService.uploadOSS(file, userId, suffix);
         } else {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_NULL_ERROR);
         }
@@ -65,7 +66,8 @@ public class FileUploaderController implements FileUploaderControllerApi {
         // 4.获得文件上传地址
         String finalPath;
         if (StringUtils.isNotBlank(path)) {
-            finalPath = fileResource.getHost() + path;
+            // finalPath = fileResource.getHost() + path;
+            finalPath = fileResource.getOssHost() + path;
         } else {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_FAILD);
         }
