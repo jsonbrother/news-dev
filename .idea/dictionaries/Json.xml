@@ -2,6 +2,8 @@
   <dictionary name="Json">
     <words>
       <w>aliyun</w>
+      <w>aname</w>
+      <w>atoken</w>
       <w>fastdfs</w>
       <w>fdfs</w>
       <w>hdel</w>

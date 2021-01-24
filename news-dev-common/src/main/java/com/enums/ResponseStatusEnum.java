@@ -25,7 +25,16 @@ public enum ResponseStatusEnum {
     FILE_UPLOAD_FAILD(511, false, "文件上传失败！"),
     FILE_FORMATTER_FAILD(512, false, "文件图片格式不支持！"),
     FILE_MAX_SIZE_ERROR(513, false, "仅支持500kb大小以下的图片上传！"),
-    FILE_NOT_EXIST_ERROR(514, false, "你所查看的文件不存在！");
+    FILE_NOT_EXIST_ERROR(514, false, "你所查看的文件不存在！"),
+
+    // admin 管理系统 56x
+    ADMIN_USERNAME_NULL_ERROR(561, false, "管理员登录名不能为空！"),
+    ADMIN_USERNAME_EXIST_ERROR(562, false, "管理员登录名已存在！"),
+    ADMIN_NAME_NULL_ERROR(563, false, "管理员负责人不能为空！"),
+    ADMIN_PASSWORD_ERROR(564, false, "密码不能为空后者两次输入不一致！"),
+    ADMIN_CREATE_ERROR(565, false, "添加管理员失败！"),
+    ADMIN_PASSWORD_NULL_ERROR(566, false, "密码不能为空！"),
+    ADMIN_NOT_EXIT_ERROR(567, false, "管理员不存在或密码错误！");
 
 
     // 响应业务状态

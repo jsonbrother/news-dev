@@ -30,7 +30,6 @@ import java.util.UUID;
  * 2021/1/16 9:21
  */
 @RestController
-@RequestMapping("passport")
 public class PassportController extends BaseController implements PassportControllerApi {
 
     private final static Logger logger = LoggerFactory.getLogger(PassportControllerApi.class);

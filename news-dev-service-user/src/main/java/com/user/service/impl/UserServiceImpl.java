@@ -80,7 +80,6 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void updateAppUserInfo(UpdateUserInfoBO userInfoBO) {
-
         String userId = userInfoBO.getId();
         // 保证双写一致 先删除redis中的数据 后更新数据库
         redis.del(REDIS_USER_INFO + ":" + userId);
