@@ -24,7 +24,7 @@ public class BaseController {
     protected static final String MOBILE_SMSCODE = "mobile:smscode";
     protected static final String REDIS_USER_TOKEN = "redis_user_token";
     protected static final String REDIS_USER_INFO = "redis_user_info";
-    protected static final String REDIS_ADMIN_INFO = "redis_admin_info";
+    protected static final String REDIS_ADMIN_TOKEN = "redis_admin_token";
 
     @Value("${website.domain-name}")
     private String DOMAIN_NAME;
@@ -32,6 +32,9 @@ public class BaseController {
     protected static final Integer MOBILE_SMSCODE_EXPIRE = 30 * 60; // 半个小时
     protected static final Integer COOKIE_EXPIRE = 30 * 24 * 60 * 60; // 一个月
     protected static final Integer COOKIE_DELETE = 0;
+
+    protected static final Integer COMMON_START_PAGE = 1; // 分页起始页
+    protected static final Integer COMMON_PAGE_SIZE = 10; // 每页条数
 
     /**
      * 获取BO中的错误信息
@@ -60,7 +63,7 @@ public class BaseController {
      */
     protected void setCookie(HttpServletResponse response, String name, String value, Integer maxAge) {
         try {
-            value = URLEncoder.encode(value, "utf-8");
+            value = URLEncoder.encode(value, "UTF-8");
             setCookieValue(response, name, value, maxAge);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -75,7 +78,7 @@ public class BaseController {
      * @param value    cookie的值
      * @param maxAge   过期时间
      */
-    private void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
+    protected void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
         cookie.setDomain(DOMAIN_NAME); // 设置在具体域名之下

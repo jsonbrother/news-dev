@@ -15,13 +15,14 @@ public class BaseInterceptor {
     @Autowired
     protected RedisOperator redis;
 
-    private static final String REDIS_USER_TOKEN = "redis_user_token";
-    public static final String REDIS_USER_INFO = "redis_user_info";
+    static final String REDIS_USER_TOKEN = "redis_user_token";
+    static final String REDIS_USER_INFO = "redis_user_info";
+    static final String REDIS_ADMIN_TOKEN = "redis_admin_token";
 
-    boolean verifyUserIdToken(String id, String token) {
+    boolean verifyUserIdToken(String id, String token, String redisKeyPrefix) {
 
         if (StringUtils.isNotBlank(id) && StringUtils.isNotBlank(token)) {
-            String redisToken = redis.get(BaseInterceptor.REDIS_USER_TOKEN + ":" + id);
+            String redisToken = redis.get(redisKeyPrefix + ":" + id);
             if (StringUtils.isBlank(redisToken)) {
                 NewsException.display(ResponseStatusEnum.UN_LOGIN);
                 return false;

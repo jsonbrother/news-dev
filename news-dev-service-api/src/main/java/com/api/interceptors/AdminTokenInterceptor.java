@@ -7,12 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 用户会话拦截器
+ * 管理员会话拦截器
  * <p>
  * Created by TongHaiJun
- * 2021/1/19 21:28
+ * 2021/1/24 21:56
  */
-public class UserTokenInterceptor extends BaseInterceptor implements HandlerInterceptor {
+public class AdminTokenInterceptor extends BaseInterceptor implements HandlerInterceptor {
+
 
     /**
      * 请求访问到controller之前
@@ -26,11 +27,11 @@ public class UserTokenInterceptor extends BaseInterceptor implements HandlerInte
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        String userId = request.getHeader("headerUserId");
-        String userToken = request.getHeader("headerUserToken");
+        String adminUserId = request.getHeader("adminUserId");
+        String adminUserToken = request.getHeader("adminUserToken");
 
         // 判断是否放行
-        boolean run = verifyUserIdToken(userId, userToken,REDIS_USER_TOKEN);
+        boolean run = verifyUserIdToken(adminUserId, adminUserToken, REDIS_ADMIN_TOKEN);
 
         return run;
     }

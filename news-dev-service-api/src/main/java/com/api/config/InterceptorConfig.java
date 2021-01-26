@@ -1,5 +1,6 @@
 package com.api.config;
 
+import com.api.interceptors.AdminTokenInterceptor;
 import com.api.interceptors.PassportInterceptor;
 import com.api.interceptors.UserActiveInterceptor;
 import com.api.interceptors.UserTokenInterceptor;
@@ -30,6 +31,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
         return new UserActiveInterceptor();
     }
 
+    @Bean
+    public AdminTokenInterceptor adminTokenInterceptor() {
+        return new AdminTokenInterceptor();
+    }
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -43,5 +49,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
 //        registry.addInterceptor(userActiveInterceptor())
 //                .addPathPatterns("");
+
+        registry.addInterceptor(adminTokenInterceptor())
+                .addPathPatterns("/adminMng/adminIsExist")
+                .addPathPatterns("/adminMng/addNewAdmin")
+                .addPathPatterns("/adminMng/getAdminList");
     }
 }
