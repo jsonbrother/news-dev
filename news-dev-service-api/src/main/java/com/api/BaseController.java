@@ -31,7 +31,7 @@ public class BaseController {
 
     protected static final Integer MOBILE_SMSCODE_EXPIRE = 30 * 60; // 半个小时
     protected static final Integer COOKIE_EXPIRE = 30 * 24 * 60 * 60; // 一个月
-    protected static final Integer COOKIE_DELETE = 0;
+    private static final Integer COOKIE_DELETE = 0;
 
     protected static final Integer COMMON_START_PAGE = 1; // 分页起始页
     protected static final Integer COMMON_PAGE_SIZE = 10; // 每页条数
@@ -78,11 +78,20 @@ public class BaseController {
      * @param value    cookie的值
      * @param maxAge   过期时间
      */
-    protected void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
+    private void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
         cookie.setDomain(DOMAIN_NAME); // 设置在具体域名之下
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    protected void delCookie(HttpServletResponse response, String name) {
+        try {
+            String delValue = URLEncoder.encode("", "UTF-8");
+            setCookieValue(response, name, delValue, COOKIE_DELETE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

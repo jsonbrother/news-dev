@@ -123,8 +123,8 @@ public class PassportController extends BaseController implements PassportContro
         redis.del(REDIS_USER_TOKEN + ":" + userId);
 
         // 2.清楚cookie中的用户信息
-        setCookie(response, "uid", "", COOKIE_DELETE);
-        setCookie(response, "utoken", "", COOKIE_DELETE);
+        delCookie(response, "uid");
+        delCookie(response, "utoken");
 
         return NewsJSONResult.success();
     }

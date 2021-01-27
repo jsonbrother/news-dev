@@ -124,6 +124,20 @@ public class AdminMngController extends BaseController implements AdminMngContro
         return NewsJSONResult.success(result);
     }
 
+    @Override
+    public NewsJSONResult adminLogout(String adminId, HttpServletResponse response) {
+
+        // 1.删除redis中admin的会话token
+        redis.del(REDIS_ADMIN_TOKEN + ":" + adminId);
+
+        // 2.删除cookie中admin的信息
+        delCookie(response, "aid");
+        delCookie(response, "aname");
+        delCookie(response, "atoken");
+
+        return NewsJSONResult.success();
+    }
+
     /***
      * 用户admin用户登陆过后的基本信息设置
      * @param adminUser admin用户信息
