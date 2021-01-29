@@ -28,9 +28,12 @@ public class AliImageReviewUtils {
 
     // 文档地址：https://help.aliyun.com/document_detail/70292.html?spm=a2c4g.11186623.2.49.6f9c75fdjaW30p#reference-fzy-ztm-v2b
 
+    private static final Integer REQUEST_CODE = 200;
+
     public boolean reviewImage(String imgUrl) throws Exception {
+        // 阿里云创建子账户 拿到相关的keyId和密钥信息
         IClientProfile profile = DefaultProfile
-                .getProfile("cn-shanghai", "", ""); // 阿里云创建子账户 拿到相关的keyId和密钥信息
+                .getProfile("cn-shanghai", "", "");
         DefaultProfile
                 .addEndpoint("cn-shanghai", "cn-shanghai", "Green", "green.cn-shanghai.aliyuncs.com");
         IAcsClient client = new DefaultAcsClient(profile);
@@ -93,13 +96,13 @@ public class AliImageReviewUtils {
             int requestCode = scrResponse.getIntValue("code");
             //每一张图片的检测结果
             JSONArray taskResults = scrResponse.getJSONArray("data");
-            if (200 == requestCode) {
+            if (REQUEST_CODE == requestCode) {
                 for (Object taskResult : taskResults) {
                     //单张图片的处理结果
                     int taskCode = ((JSONObject) taskResult).getIntValue("code");
                     //图片要检测的场景的处理结果, 如果是多个场景，则会有每个场景的结果
                     JSONArray sceneResults = ((JSONObject) taskResult).getJSONArray("results");
-                    if (200 == taskCode) {
+                    if (REQUEST_CODE == taskCode) {
                         Object sceneResult = sceneResults.get(0);
                         // for (Object sceneResult : sceneResults) {
                         String scene = ((JSONObject) sceneResult).getString("scene");

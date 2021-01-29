@@ -2,6 +2,9 @@ package com.user.controller;
 
 import com.api.BaseController;
 import com.api.controller.user.PassportControllerApi;
+import com.constant.CookieConstant;
+import com.constant.RedisConstant;
+import com.constant.UserConstant;
 import com.enums.ResponseStatusEnum;
 import com.enums.UserStatus;
 import com.pojo.AppUser;
@@ -16,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,16 +52,16 @@ public class PassportController extends BaseController implements PassportContro
         String userIp = IPUtil.getRequestIp(request);
 
         // 2.根据用户的ip进行限制 限制用户在60秒内只能获得一次验证码
-        redis.setnx60s(MOBILE_SMSCODE + ":" + userIp, userIp);
+        redis.setnx60s(RedisConstant.MOBILE_SMSCODE + ":" + userIp, userIp);
 
         // 3.生成手机验证码并且发送短信
         String random = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        smsUtils.sendSMS(mobile, random);
+        smsUtils.sendSms(mobile, random);
 
         logger.info("用户手机号:{},ip地址:{},短信验证码:{}", mobile, userIp, random);
 
         // 4.把验证码存入redis 用于后续进行验证
-        redis.set(MOBILE_SMSCODE + ":" + mobile, random, MOBILE_SMSCODE_EXPIRE);
+        redis.set(RedisConstant.MOBILE_SMSCODE + ":" + mobile, random, CookieConstant.MOBILE_SMSCODE_EXPIRE);
 
 
         return NewsJSONResult.success();
@@ -81,8 +83,8 @@ public class PassportController extends BaseController implements PassportContro
         String mobile = registLoginBO.getMobile();
         String smsCode = registLoginBO.getSmsCode();
 
-        String redisSMSCode = redis.get(MOBILE_SMSCODE + ":" + mobile);
-        if (StringUtils.isBlank(redisSMSCode) || !redisSMSCode.equals(smsCode)) {
+        String redisSmsCode = redis.get(RedisConstant.MOBILE_SMSCODE + ":" + mobile);
+        if (StringUtils.isBlank(redisSmsCode) || !redisSmsCode.equals(smsCode)) {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.SMS_CODE_ERROR);
         }
 
@@ -101,16 +103,16 @@ public class PassportController extends BaseController implements PassportContro
         if (!userActiveStatus.equals(UserStatus.FROZEN.type)) {
             // 保存token到redis
             String uToken = UUID.randomUUID().toString();
-            redis.set(REDIS_USER_TOKEN + ":" + appUser.getId(), uToken);
-            redis.set(REDIS_USER_INFO + ":" + appUser.getId(), JsonUtils.objectToJson(appUser));
+            redis.set(RedisConstant.REDIS_USER_TOKEN + ":" + appUser.getId(), uToken);
+            redis.set(RedisConstant.REDIS_USER_INFO + ":" + appUser.getId(), JsonUtils.objectToJson(appUser));
 
             // 保存用户id和token到cookie
-            setCookie(response, "uid", appUser.getId(), COOKIE_EXPIRE);
-            setCookie(response, "utoken", uToken, COOKIE_EXPIRE);
+            setCookie(response, UserConstant.ID, appUser.getId(), CookieConstant.COOKIE_EXPIRE);
+            setCookie(response, UserConstant.TOKEN, uToken, CookieConstant.COOKIE_EXPIRE);
         }
 
         // 5.用户登陆或注册成功 需要删除redis中的短信验证码
-        redis.del(MOBILE_SMSCODE + ":" + mobile);
+        redis.del(RedisConstant.MOBILE_SMSCODE + ":" + mobile);
 
         // 6.返回用户的状态码
         return NewsJSONResult.success(userActiveStatus);
@@ -120,11 +122,11 @@ public class PassportController extends BaseController implements PassportContro
     public NewsJSONResult logout(String userId, HttpServletRequest request, HttpServletResponse response) {
 
         // 1.清除redis中的用户信息
-        redis.del(REDIS_USER_TOKEN + ":" + userId);
+        redis.del(RedisConstant.REDIS_USER_TOKEN + ":" + userId);
 
         // 2.清楚cookie中的用户信息
-        delCookie(response, "uid");
-        delCookie(response, "utoken");
+        delCookie(response, UserConstant.ID);
+        delCookie(response, UserConstant.TOKEN);
 
         return NewsJSONResult.success();
     }

@@ -31,6 +31,7 @@ public class DefaultRandomCodeStrategy implements RandomCodeStrategy {
 
     int minRandomSize = 6;
     int maxRandomSize = 6;
+    int maxPrefixIndex = 1000;
 
     public DefaultRandomCodeStrategy() {
         destroyFileLockWhenShutdown();
@@ -40,7 +41,7 @@ public class DefaultRandomCodeStrategy implements RandomCodeStrategy {
     public void init() {
         release();
 
-        while (++prefixIndex < 1000) {
+        while (++prefixIndex < maxPrefixIndex) {
             if (tryUsePrefix()) return;
         }
 

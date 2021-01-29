@@ -3,6 +3,9 @@ package com.admin.controller;
 import com.admin.service.AdminUserService;
 import com.api.BaseController;
 import com.api.controller.admin.AdminMngControllerApi;
+import com.constant.AdminConstant;
+import com.constant.CookieConstant;
+import com.constant.RedisConstant;
 import com.enums.ResponseStatusEnum;
 import com.exception.NewsException;
 import com.pojo.AdminUser;
@@ -56,7 +59,8 @@ public class AdminMngController extends BaseController implements AdminMngContro
         }
         boolean isPwdMatch = BCrypt.checkpw(adminLoginBO.getPassword(), adminUser.getPassword());
         if (isPwdMatch) {
-            doLoginSettings(adminUser, response); // 保存admin信息到浏览器
+            // 保存admin信息到浏览器
+            doLoginSettings(adminUser, response);
             return NewsJSONResult.success();
         } else {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.ADMIN_NOT_EXIT_ERROR);
@@ -128,12 +132,12 @@ public class AdminMngController extends BaseController implements AdminMngContro
     public NewsJSONResult adminLogout(String adminId, HttpServletResponse response) {
 
         // 1.删除redis中admin的会话token
-        redis.del(REDIS_ADMIN_TOKEN + ":" + adminId);
+        redis.del(RedisConstant.REDIS_ADMIN_TOKEN + ":" + adminId);
 
         // 2.删除cookie中admin的信息
-        delCookie(response, "aid");
-        delCookie(response, "aname");
-        delCookie(response, "atoken");
+        delCookie(response, AdminConstant.ID);
+        delCookie(response, AdminConstant.NAME);
+        delCookie(response, AdminConstant.TOKEN);
 
         return NewsJSONResult.success();
     }
@@ -146,12 +150,12 @@ public class AdminMngController extends BaseController implements AdminMngContro
     private void doLoginSettings(AdminUser adminUser, HttpServletResponse response) {
         // 保存token放入到redis中
         String token = UUID.randomUUID().toString();
-        redis.set(REDIS_ADMIN_TOKEN + ":" + adminUser.getId(), token);
+        redis.set(RedisConstant.REDIS_ADMIN_TOKEN + ":" + adminUser.getId(), token);
 
         // 保存admin登陆基本token信息到cookie中
-        setCookie(response, "atoken", token, COOKIE_EXPIRE);
-        setCookie(response, "aid", adminUser.getId(), COOKIE_EXPIRE);
-        setCookie(response, "aname", adminUser.getUsername(), COOKIE_EXPIRE);
+        setCookie(response, AdminConstant.ID, adminUser.getId(), CookieConstant.COOKIE_EXPIRE);
+        setCookie(response, AdminConstant.NAME, adminUser.getUsername(), CookieConstant.COOKIE_EXPIRE);
+        setCookie(response, AdminConstant.TOKEN, token, CookieConstant.COOKIE_EXPIRE);
     }
 
     /***

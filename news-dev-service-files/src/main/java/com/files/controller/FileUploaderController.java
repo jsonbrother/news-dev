@@ -1,6 +1,5 @@
 package com.files.controller;
 
-import com.api.BaseController;
 import com.api.controller.files.FileUploaderControllerApi;
 import com.enums.ResponseStatusEnum;
 import com.files.resource.FileResource;
@@ -27,6 +26,10 @@ public class FileUploaderController implements FileUploaderControllerApi {
     private final FileResource fileResource;
     private final AliImageReviewUtils aliImageReviewUtils;
 
+    private final String PICTURE_SUFFIX_PNG = "png";
+    private final String PICTURE_SUFFIX_JPG = "jpg";
+    private final String PICTURE_SUFFIX_JPEG = "jpeg";
+
     @Autowired
     public FileUploaderController(UploaderService uploaderService, FileResource fileResource, AliImageReviewUtils aliImageReviewUtils) {
         this.uploaderService = uploaderService;
@@ -50,16 +53,16 @@ public class FileUploaderController implements FileUploaderControllerApi {
         String fileName = file.getOriginalFilename();
         if (StringUtils.isNotBlank(fileName)) {
             String[] fileNameArr = fileName.split("\\.");
-            String suffix = fileNameArr[fileNameArr.length - 1]; // 获得文件后缀
+            // 获得文件后缀
+            String suffix = fileNameArr[fileNameArr.length - 1];
             // 判断后缀是否符合我们的预定义规范
-            if (!suffix.equalsIgnoreCase("png") && !suffix.equalsIgnoreCase("jpg")
-                    && !suffix.equalsIgnoreCase("jpeg")) {
+            if (!PICTURE_SUFFIX_PNG.equalsIgnoreCase(suffix) && !PICTURE_SUFFIX_JPG.equalsIgnoreCase(suffix)
+                    && !PICTURE_SUFFIX_JPEG.equalsIgnoreCase(suffix)) {
                 return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_FORMATTER_FAILD);
             }
 
             // 3.执行上传
-            // path = uploaderService.uploadFdfs(file, suffix);
-            path = uploaderService.uploadOSS(file, userId, suffix);
+            path = uploaderService.uploadOss(file, userId, suffix);
         } else {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_NULL_ERROR);
         }
@@ -75,14 +78,15 @@ public class FileUploaderController implements FileUploaderControllerApi {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_FAILD);
         }
 
-        // return NewsJSONResult.success(doAliImageReview(finalPath));
         return NewsJSONResult.success(finalPath);
     }
 
 
     private static final String FAILED_IMAGE_URL = "file:/E:/idea%20product/faild.jpeg";
 
-    // 阿里云图片自动审核
+    /**
+     * 阿里云图片自动审核
+     */
     private String doAliImageReview(String pendingImageUrl) {
 
         /*

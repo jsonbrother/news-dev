@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "aliyun",
+      "type": "com.utils.extend.AliyunResource",
+      "sourceType": "com.utils.extend.AliyunResource"
+    }
+  ],
+  "properties": [
+    {
+      "name": "aliyun.access-key-id",
+      "type": "java.lang.String",
+      "sourceType": "com.utils.extend.AliyunResource"
+    },
+    {
+      "name": "aliyun.access-key-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.utils.extend.AliyunResource"
+    }
+  ],
+  "hints": []
+}

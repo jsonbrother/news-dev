@@ -8,6 +8,7 @@ package com.utils;
  */
 public class DesensitizationUtil {
 
+    private static final int LEN = 2;
     private static final int SIZE = 6;
     private static final String SYMBOL = "*";
 
@@ -25,7 +26,7 @@ public class DesensitizationUtil {
         int pamTwo = pamOne - 1;
         int pamThree = len % 2;
         StringBuilder stringBuilder = new StringBuilder();
-        if (len <= 2) {
+        if (len <= LEN) {
             if (pamThree == 1) {
                 return SYMBOL;
             }
@@ -37,7 +38,7 @@ public class DesensitizationUtil {
                 stringBuilder.append(SYMBOL);
                 stringBuilder.append(value, len - 1, len);
 
-            } else if (pamTwo >= SIZE / 2 && SIZE + 1 != len) {
+            } else if (pamTwo >= SIZE / LEN && SIZE + 1 != len) {
                 int pamFive = (len - SIZE) / 2;
                 stringBuilder.append(value, 0, pamFive);
                 for (int i = 0; i < SIZE; i++) {

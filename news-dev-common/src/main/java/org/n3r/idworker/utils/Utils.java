@@ -65,10 +65,10 @@ public class Utils {
     }
 
     public static long decode(String s, String symbols) {
-        final int B = symbols.length();
+        final int b = symbols.length();
         long num = 0;
         for (char ch : s.toCharArray()) {
-            num *= B;
+            num *= b;
             num += symbols.indexOf(ch);
         }
         return num;
@@ -79,16 +79,18 @@ public class Utils {
     }
 
     public static String encode(long num, String symbols) {
-        final int B = symbols.length();
+        final int b = symbols.length();
         StringBuilder sb = new StringBuilder();
         while (num != 0) {
-            sb.append(symbols.charAt((int) (num % B)));
-            num /= B;
+            sb.append(symbols.charAt((int) (num % b)));
+            num /= b;
         }
         return sb.reverse().toString();
     }
 
-    // all un-clearly-recognized letters are skiped.
+    /**
+     *  all un-clearly-recognized letters are skiped.
+     */
     static String defaultRange = "0123456789ABCDFGHKMNPRSTWXYZ";
 
     public static String padLeft(String str, int size, char padChar) {

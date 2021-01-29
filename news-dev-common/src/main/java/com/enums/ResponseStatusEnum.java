@@ -37,11 +37,17 @@ public enum ResponseStatusEnum {
     ADMIN_NOT_EXIT_ERROR(567, false, "管理员不存在或密码错误！");
 
 
-    // 响应业务状态
+    /**
+     * 响应业务状态
+     */
     private Integer status;
-    // 调用是否成功
+    /**
+     * 调用是否成功
+     */
     private Boolean success;
-    // 响应消息 可以为成功或者失败的消息
+    /**
+     * 响应消息 可以为成功或者失败的消息
+     */
     private String msg;
 
     ResponseStatusEnum(Integer status, Boolean success, String msg) {

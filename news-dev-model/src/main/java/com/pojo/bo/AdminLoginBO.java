@@ -41,4 +41,13 @@ public class AdminLoginBO {
     public void setImg64(String img64) {
         this.img64 = img64;
     }
+
+    @Override
+    public String toString() {
+        return "AdminLoginBO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", img64='" + img64 + '\'' +
+                '}';
+    }
 }

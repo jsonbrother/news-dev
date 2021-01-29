@@ -1,5 +1,6 @@
 package com.api;
 
+import com.constant.CookieConstant;
 import com.utils.RedisOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,20 +22,11 @@ public class BaseController {
     @Autowired
     protected RedisOperator redis;
 
-    protected static final String MOBILE_SMSCODE = "mobile:smscode";
-    protected static final String REDIS_USER_TOKEN = "redis_user_token";
-    protected static final String REDIS_USER_INFO = "redis_user_info";
-    protected static final String REDIS_ADMIN_TOKEN = "redis_admin_token";
-
     @Value("${website.domain-name}")
-    private String DOMAIN_NAME;
+    private String domainName;
 
-    protected static final Integer MOBILE_SMSCODE_EXPIRE = 30 * 60; // 半个小时
-    protected static final Integer COOKIE_EXPIRE = 30 * 24 * 60 * 60; // 一个月
-    private static final Integer COOKIE_DELETE = 0;
-
-    protected static final Integer COMMON_START_PAGE = 1; // 分页起始页
-    protected static final Integer COMMON_PAGE_SIZE = 10; // 每页条数
+    protected static final Integer COMMON_START_PAGE = 1;
+    protected static final Integer COMMON_PAGE_SIZE = 10;
 
     /**
      * 获取BO中的错误信息
@@ -81,7 +73,8 @@ public class BaseController {
     private void setCookieValue(HttpServletResponse response, String name, String value, Integer maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
-        cookie.setDomain(DOMAIN_NAME); // 设置在具体域名之下
+        // 设置在具体域名之下
+        cookie.setDomain(domainName);
         cookie.setPath("/");
         response.addCookie(cookie);
     }
@@ -89,7 +82,7 @@ public class BaseController {
     protected void delCookie(HttpServletResponse response, String name) {
         try {
             String delValue = URLEncoder.encode("", "UTF-8");
-            setCookieValue(response, name, delValue, COOKIE_DELETE);
+            setCookieValue(response, name, delValue, CookieConstant.COOKIE_DELETE);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

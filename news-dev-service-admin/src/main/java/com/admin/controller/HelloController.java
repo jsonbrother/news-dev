@@ -4,7 +4,6 @@ import com.api.controller.user.HelloControllerApi;
 import com.result.NewsJSONResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

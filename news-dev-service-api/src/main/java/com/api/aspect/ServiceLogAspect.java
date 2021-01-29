@@ -18,6 +18,9 @@ public class ServiceLogAspect {
 
     private final static Logger logger = LoggerFactory.getLogger(ServiceLogAspect.class);
 
+    private final Integer ERROR_TAKE_TIME = 3000;
+    private final Integer WARN_TAKE_TIME = 2000;
+
     /**
      * AOP通知:
      * 1.前置通知
@@ -39,9 +42,9 @@ public class ServiceLogAspect {
         long endTime = System.currentTimeMillis();
         long takeTime = endTime - startTime;
 
-        if (takeTime > 3000) {
+        if (takeTime > ERROR_TAKE_TIME) {
             logger.error("当前执行耗时:{}", takeTime);
-        } else if (takeTime > 2000) {
+        } else if (takeTime > WARN_TAKE_TIME) {
             logger.warn("当前执行耗时:{}", takeTime);
         } else {
             logger.info("当前执行耗时:{}", takeTime);

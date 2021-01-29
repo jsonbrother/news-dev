@@ -21,14 +21,13 @@ public enum UserStatus {
 
     /**
      * 判断传入的用户状态是不是有效的值
-     * @param tempStatus
-     * @return
+     *
+     * @param tempStatus 状态码
+     * @return 应答
      */
     public static boolean isUserStatusValid(Integer tempStatus) {
         if (tempStatus != null) {
-            if (tempStatus == INACTIVE.type || tempStatus == ACTIVE.type || tempStatus == FROZEN.type) {
-                return true;
-            }
+            return tempStatus.equals(INACTIVE.type) || tempStatus.equals(ACTIVE.type) || tempStatus.equals(tempStatus == FROZEN.type);
         }
         return false;
     }

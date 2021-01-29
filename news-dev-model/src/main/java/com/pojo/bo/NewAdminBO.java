@@ -71,4 +71,16 @@ public class NewAdminBO {
     public void setFaceId(String faceId) {
         this.faceId = faceId;
     }
+
+    @Override
+    public String toString() {
+        return "NewAdminBO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", adminName='" + adminName + '\'' +
+                ", img64='" + img64 + '\'' +
+                ", faceId='" + faceId + '\'' +
+                '}';
+    }
 }

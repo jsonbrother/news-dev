@@ -33,10 +33,12 @@ public class DateUtil {
     public static String DATE_PATTERN = "yyyyMMddHHmmss";
 
     /**
-     * 则个
+     * 这个
      */
     private static boolean LENIENT_DATE = false;
 
+    private static final Integer TWO_MONTH = 2;
+    private static final Integer TWELVE_MONTH = 12;
 
     private static Random random = new Random();
     private static final int ID_BYTES = 10;
@@ -50,9 +52,9 @@ public class DateUtil {
         return result.toString();
     }
 
-    protected static final float normalizedJulian(float JD) {
+    protected static final float normalizedJulian(float jd) {
 
-        float f = Math.round(JD + 0.5f) - 0.5f;
+        float f = Math.round(jd + 0.5f) - 0.5f;
 
         return f;
     }
@@ -85,19 +87,21 @@ public class DateUtil {
         int day = (int) (B - D - F);
         int month = (int) (E - 1);
 
-        if (month > 12) {
+        if (month > TWELVE_MONTH) {
             month = month - 12;
         }
 
-        int year = (int) (C - 4715); //(if Month is January or February) or C-4716 (otherwise)
+        //(if Month is January or February) or C-4716 (otherwise)
+        int year = (int) (C - 4715);
 
-        if (month > 2) {
+        if (month > TWO_MONTH) {
             year--;
         }
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month - 1); // damn 0 offsets
+        // damn 0 offsets
+        c.set(Calendar.MONTH, month - 1);
         c.set(Calendar.DATE, day);
 
         return c.getTime();
@@ -278,13 +282,13 @@ public class DateUtil {
      * @return Timestamp
      */
     public static java.sql.Timestamp getCurrentTimestamp() {
-        return new java.sql.Timestamp(new Date().getTime());
+        return new java.sql.Timestamp(System.currentTimeMillis());
     }
 
     /**
      * java.util.Date
      *
-     * @param dateText
+     * @param dateString
      * @param format
      * @return
      */
@@ -366,9 +370,6 @@ public class DateUtil {
     /**
      * 返回固定格式的当前时间
      * yyyy-MM-dd hh:mm:ss
-     *
-     * @param date
-     * @return
      */
     public static String dateToStringWithTime() {
 
@@ -404,7 +405,7 @@ public class DateUtil {
 
     /**
      * @param date
-     * @param days
+     * @param mnt
      * @return java.util.Date
      */
     public static Date dateIncreaseByMonth(Date date, int mnt) {
@@ -651,8 +652,6 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-//    	String timeDir=DateUtil.dateToString(new Date(),DateUtil.ISO_EXPANDED_DATE_FORMAT);
-//		System.out.println(timeDir);
         boolean flag = DateUtil.isValidDate("1990-10-32", DateUtil.ISO_EXPANDED_DATE_FORMAT);
         System.out.println(flag);
     }

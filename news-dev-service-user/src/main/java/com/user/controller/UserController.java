@@ -2,6 +2,7 @@ package com.user.controller;
 
 import com.api.BaseController;
 import com.api.controller.user.UserControllerApi;
+import com.constant.RedisConstant;
 import com.enums.ResponseStatusEnum;
 import com.pojo.AppUser;
 import com.pojo.bo.UpdateUserInfoBO;
@@ -87,7 +88,7 @@ public class UserController extends BaseController implements UserControllerApi 
 
     private AppUser getUser(String userId) {
         // 查询判断redis中是否存在该用户信息
-        String userJson = redis.get(REDIS_USER_INFO + ":" + userId);
+        String userJson = redis.get(RedisConstant.REDIS_USER_INFO + ":" + userId);
 
         AppUser appUser;
         if (StringUtils.isNotBlank(userJson)) {
@@ -95,7 +96,7 @@ public class UserController extends BaseController implements UserControllerApi 
         } else {
             appUser = userService.getAppUser(userId);
             // 数据存入redis中
-            redis.set(REDIS_USER_INFO + ":" + userId, JsonUtils.objectToJson(appUser));
+            redis.set(RedisConstant.REDIS_USER_INFO + ":" + userId, JsonUtils.objectToJson(appUser));
         }
 
         return appUser;

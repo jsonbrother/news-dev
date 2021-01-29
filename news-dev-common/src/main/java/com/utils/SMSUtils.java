@@ -26,9 +26,9 @@ public class SMSUtils {
         this.aliyunResource = aliyunResource;
     }
 
-    public void sendSMS(String mobile, String code) {
+    public void sendSms(String mobile, String code) {
         DefaultProfile profile = DefaultProfile.getProfile("cn-shanghai",
-                aliyunResource.getAccessKeyID(),
+                aliyunResource.getAccessKeyId(),
                 aliyunResource.getAccessKeySecret());
         IAcsClient client = new DefaultAcsClient(profile);
 

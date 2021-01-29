@@ -25,5 +25,5 @@ public interface UploaderService {
      * @return 文件存放地址
      * @throws Exception 异常信息
      */
-    String uploadOSS(MultipartFile file, String userId, String fileExtName) throws Exception;
+    String uploadOss(MultipartFile file, String userId, String fileExtName) throws Exception;
 }

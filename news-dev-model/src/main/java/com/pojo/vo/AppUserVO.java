@@ -54,4 +54,14 @@ public class AppUserVO {
     public void setActiveStatus(Integer activeStatus) {
         this.activeStatus = activeStatus;
     }
+
+    @Override
+    public String toString() {
+        return "AppUserVO{" +
+                "id='" + id + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", face='" + face + '\'' +
+                ", activeStatus=" + activeStatus +
+                '}';
+    }
 }

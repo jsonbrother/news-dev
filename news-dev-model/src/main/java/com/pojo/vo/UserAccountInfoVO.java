@@ -149,4 +149,21 @@ public class UserAccountInfoVO {
     public void setDistrict(String district) {
         this.district = district;
     }
+
+    @Override
+    public String toString() {
+        return "UserAccountInfoVO{" +
+                "id='" + id + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", face='" + face + '\'' +
+                ", realName='" + realName + '\'' +
+                ", email='" + email + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
+                '}';
+    }
 }

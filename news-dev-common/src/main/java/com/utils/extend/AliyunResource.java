@@ -15,16 +15,16 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "aliyun")
 public class AliyunResource {
 
-    private String accessKeyID;
+    private String accessKeyId;
 
     private String accessKeySecret;
 
-    public String getAccessKeyID() {
-        return accessKeyID;
+    public String getAccessKeyId() {
+        return accessKeyId;
     }
 
-    public void setAccessKeyID(String accessKeyID) {
-        this.accessKeyID = accessKeyID;
+    public void setAccessKeyId(String accessKeyId) {
+        this.accessKeyId = accessKeyId;
     }
 
     public String getAccessKeySecret() {
