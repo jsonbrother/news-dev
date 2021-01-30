@@ -4,14 +4,20 @@ import com.api.controller.files.FileUploaderControllerApi;
 import com.enums.ResponseStatusEnum;
 import com.files.resource.FileResource;
 import com.files.service.UploaderService;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.pojo.bo.NewAdminBO;
 import com.result.NewsJSONResult;
 import com.utils.extend.AliImageReviewUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * Created by TongHaiJun
@@ -25,16 +31,19 @@ public class FileUploaderController implements FileUploaderControllerApi {
     private final UploaderService uploaderService;
     private final FileResource fileResource;
     private final AliImageReviewUtils aliImageReviewUtils;
+    private final GridFSBucket gridFSBucket;
 
-    private final String PICTURE_SUFFIX_PNG = "png";
-    private final String PICTURE_SUFFIX_JPG = "jpg";
-    private final String PICTURE_SUFFIX_JPEG = "jpeg";
+    private static final String PICTURE_SUFFIX_PNG = "png";
+    private static final String PICTURE_SUFFIX_JPG = "jpg";
+    private static final String PICTURE_SUFFIX_JPEG = "jpeg";
 
     @Autowired
-    public FileUploaderController(UploaderService uploaderService, FileResource fileResource, AliImageReviewUtils aliImageReviewUtils) {
+    public FileUploaderController(UploaderService uploaderService, FileResource fileResource,
+                                  AliImageReviewUtils aliImageReviewUtils, GridFSBucket gridFSBucket) {
         this.uploaderService = uploaderService;
         this.fileResource = fileResource;
         this.aliImageReviewUtils = aliImageReviewUtils;
+        this.gridFSBucket = gridFSBucket;
     }
 
     @Override
@@ -81,6 +90,27 @@ public class FileUploaderController implements FileUploaderControllerApi {
         return NewsJSONResult.success(finalPath);
     }
 
+    @Override
+    public NewsJSONResult uploadToGridFs(NewAdminBO newAdminBO) throws Exception {
+
+        // 1.获得图片的base64字符串
+        String file64 = newAdminBO.getImg64();
+
+        // 2.将base64字符串转换成byte数组
+        byte[] bytes = new BASE64Decoder().decodeBuffer(file64.trim());
+
+        // 3.转换为输入流
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
+
+        // 4.上传到gridFs中
+        String imgName = newAdminBO.getUsername() + ".png";
+        ObjectId objectId = gridFSBucket.uploadFromStream(imgName, inputStream);
+
+        // 5.获得文件在gridFs中的主键
+        String fileId = objectId.toString();
+
+        return NewsJSONResult.success(fileId);
+    }
 
     private static final String FAILED_IMAGE_URL = "file:/E:/idea%20product/faild.jpeg";
 
