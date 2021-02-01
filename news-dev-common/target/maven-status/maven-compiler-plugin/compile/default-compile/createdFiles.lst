@@ -1,4 +1,5 @@
 com\constant\UserConstant.class
 com\constant\RedisConstant.class
 com\constant\AdminConstant.class
+com\utils\FileUtils.class
 com\constant\CookieConstant.class

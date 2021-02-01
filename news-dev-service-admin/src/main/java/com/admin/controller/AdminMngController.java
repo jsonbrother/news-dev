@@ -6,6 +6,7 @@ import com.api.controller.admin.AdminMngControllerApi;
 import com.constant.AdminConstant;
 import com.constant.CookieConstant;
 import com.constant.RedisConstant;
+import com.enums.FaceVerifyType;
 import com.enums.ResponseStatusEnum;
 import com.exception.NewsException;
 import com.pojo.AdminUser;
@@ -13,13 +14,16 @@ import com.pojo.bo.AdminLoginBO;
 import com.pojo.bo.NewAdminBO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
+import com.utils.FaceVerifyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -35,10 +39,14 @@ public class AdminMngController extends BaseController implements AdminMngContro
     private final Logger logger = LoggerFactory.getLogger(AdminMngController.class);
 
     private final AdminUserService adminUserService;
+    private final RestTemplate restTemplate;
+    private final FaceVerifyUtils faceVerifyUtils;
 
     @Autowired
-    public AdminMngController(AdminUserService adminUserService) {
+    public AdminMngController(AdminUserService adminUserService, RestTemplate restTemplate, FaceVerifyUtils faceVerifyUtils) {
         this.adminUserService = adminUserService;
+        this.restTemplate = restTemplate;
+        this.faceVerifyUtils = faceVerifyUtils;
     }
 
     @Override
@@ -138,6 +146,45 @@ public class AdminMngController extends BaseController implements AdminMngContro
         delCookie(response, AdminConstant.ID);
         delCookie(response, AdminConstant.NAME);
         delCookie(response, AdminConstant.TOKEN);
+
+        return NewsJSONResult.success();
+    }
+
+    @Override
+    public NewsJSONResult adminFaceLogin(AdminLoginBO adminLoginBO, HttpServletResponse response) {
+
+        // 1.判断用户名和人脸信息
+        if (StringUtils.isBlank(adminLoginBO.getUsername())) {
+            return NewsJSONResult.errorCustom(ResponseStatusEnum.ADMIN_USERNAME_NULL_ERROR);
+        }
+        if (StringUtils.isBlank(adminLoginBO.getImg64())) {
+            return NewsJSONResult.errorCustom(ResponseStatusEnum.ADMIN_FACE_NULL_ERROR);
+        }
+
+        // 2.获得数据库中faceId
+        AdminUser adminUser = adminUserService.queryAdminByUsername(adminLoginBO.getUsername());
+        String adminFaceId = adminUser.getFaceId();
+        if (StringUtils.isBlank(adminFaceId)) {
+            return NewsJSONResult.errorCustom(ResponseStatusEnum.ADMIN_FACE_LOGIN_ERROR);
+        }
+
+        // 3.请求文件服务 获得人脸数据的base64
+        String fileServiceUrlExecute = "http://files.news.com:8004/fs/readFace64InGridFS?faceId=" + adminFaceId;
+        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(fileServiceUrlExecute, NewsJSONResult.class);
+        NewsJSONResult bodyResult = responseEntity.getBody();
+        String base64DB = bodyResult.getData().toString();
+
+        // 4.调用阿里ai进行人脸对比识别 判断可信度
+        boolean result = faceVerifyUtils.faceVerify(FaceVerifyType.BASE64.type,
+                adminLoginBO.getImg64(),
+                base64DB,
+                60); // 测试 及格则通过
+        if (!result) {
+            return NewsJSONResult.errorCustom(ResponseStatusEnum.ADMIN_FACE_LOGIN_ERROR);
+        }
+
+        // 5.admin登陆后的数据设置
+        doLoginSettings(adminUser, response);
 
         return NewsJSONResult.success();
     }

@@ -2,11 +2,16 @@ package com.files.controller;
 
 import com.api.controller.files.FileUploaderControllerApi;
 import com.enums.ResponseStatusEnum;
+import com.exception.NewsException;
 import com.files.resource.FileResource;
 import com.files.service.UploaderService;
 import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSFindIterable;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mongodb.client.model.Filters;
 import com.pojo.bo.NewAdminBO;
 import com.result.NewsJSONResult;
+import com.utils.FileUtils;
 import com.utils.extend.AliImageReviewUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
@@ -17,7 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /**
  * Created by TongHaiJun
@@ -112,10 +121,38 @@ public class FileUploaderController implements FileUploaderControllerApi {
         return NewsJSONResult.success(fileId);
     }
 
+    @Override
+    public void readInGridFs(String faceId, HttpServletResponse response) throws Exception {
+
+        // 1.判断人脸Id参数
+        if (StringUtils.isBlank(faceId) || "null".equals(faceId)) {
+            NewsException.display(ResponseStatusEnum.FILE_NOT_EXIST_ERROR);
+        }
+
+        // 2.从gridFS中读取
+        File adminFile = readGridFsByFaceId(faceId);
+
+        // 3.把人脸图片输出到浏览器
+        FileUtils.downloadFileByStream(response, adminFile);
+    }
+
+    @Override
+    public NewsJSONResult readFace64InGridFs(String faceId) throws Exception {
+
+        // 1.获得gridFs中人脸文件
+        File file = readGridFsByFaceId(faceId);
+
+        // 2.人脸文件转换base64
+        String base64Face = FileUtils.fileToBase64(file);
+
+        // 3.返回人脸base64
+        return NewsJSONResult.success(base64Face);
+    }
+
     private static final String FAILED_IMAGE_URL = "file:/E:/idea%20product/faild.jpeg";
 
     /**
-     * 阿里云图片自动审核
+     * 阿里云图片自动审核i
      */
     private String doAliImageReview(String pendingImageUrl) {
 
@@ -140,5 +177,39 @@ public class FileUploaderController implements FileUploaderControllerApi {
 
         return pendingImageUrl;
     }
+
+    /**
+     * 根据faceId从gridFS获取文件
+     */
+    private File readGridFsByFaceId(String faceId) throws Exception {
+
+
+        // 根据faceId获取文件
+        ObjectId objectId = new ObjectId(faceId);
+        GridFSFindIterable gridFSFiles = gridFSBucket.find(Filters.eq("_id", objectId));
+        GridFSFile gridFSFile = gridFSFiles.first();
+        if (gridFSFile == null) {
+            NewsException.display(ResponseStatusEnum.FILE_NOT_EXIST_ERROR);
+        }
+
+        // 获得文件名称
+        String fileName = gridFSFile.getFilename();
+        logger.info("人脸文件名称:{}", fileName);
+
+        // 获取文件流 保存文件到本地或者服务器的临时目录
+        File fileTemp = new File("E:\\tmp\\news-dev\\face\\");
+        if (!fileTemp.exists()) {
+            fileTemp.mkdirs();
+        }
+        File file = new File("E:\\tmp\\news-dev\\face\\" + fileName);
+
+        // 创建文件输出流
+        OutputStream os = new FileOutputStream(file);
+        // 下载到服务器或者本地
+        gridFSBucket.downloadToStream(objectId, os);
+
+        return file;
+    }
+
 
 }

@@ -34,7 +34,13 @@ public enum ResponseStatusEnum {
     ADMIN_PASSWORD_ERROR(564, false, "密码不能为空或者两次输入不一致！"),
     ADMIN_CREATE_ERROR(565, false, "添加管理员失败！"),
     ADMIN_PASSWORD_NULL_ERROR(566, false, "密码不能为空！"),
-    ADMIN_NOT_EXIT_ERROR(567, false, "管理员不存在或密码错误！");
+    ADMIN_NOT_EXIT_ERROR(567, false, "管理员不存在或密码错误！"),
+    ADMIN_FACE_NULL_ERROR(568, false, "人脸信息不能为空！"),
+    ADMIN_FACE_LOGIN_ERROR(569, false, "人脸识别失败，请重试！"),
+
+    // 人脸识别错误代码
+    FACE_VERIFY_TYPE_ERROR(600, false, "人脸比对验证类型不正确！"),
+    FACE_VERIFY_LOGIN_ERROR(601, false, "人脸登录失败！");
 
 
     /**

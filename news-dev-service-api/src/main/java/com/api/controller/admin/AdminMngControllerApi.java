@@ -39,4 +39,10 @@ public interface AdminMngControllerApi {
     @ApiOperation(value = "admin退出登陆", notes = "admin退出登陆", httpMethod = "POST")
     @PostMapping("/adminLogout")
     NewsJSONResult adminLogout(@RequestParam String adminId, HttpServletResponse response);
+
+    @ApiOperation(value = "管理员人脸登录", notes = "管理员人脸登录", httpMethod = "POST")
+    @PostMapping("/adminFaceLogin")
+    NewsJSONResult adminFaceLogin(@RequestBody AdminLoginBO adminLoginBO, HttpServletResponse response);
 }
+
+

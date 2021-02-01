@@ -4,6 +4,7 @@ E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\aspect\Servi
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\Swagger2.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\my\mapper\MyMapper.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\InterceptorConfig.java
+E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\CloudConfig.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\CorsConfig.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\PageInterceptorConfig.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\controller\files\FileUploaderControllerApi.java
