@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户激活状态检查拦截器
- * <p>发文章，修改文章，删除文章，
+ * <p>发文章，修改文章，删除文章
  * <p>发表评论，查看评论等等
  * <p>这些接口都是需要在用户激活以后，才能进行
  * <p>否则需要提示用户前往[账号设置]去修改信息
- * Created by TongHaiJun
- * 2021/1/19 21:47
+ *
+ * @author Json
+ * @date 2021/1/19 21:47
  */
 public class UserActiveInterceptor extends BaseInterceptor implements HandlerInterceptor {
 

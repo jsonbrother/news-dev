@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户会话拦截器
- * <p>
- * Created by TongHaiJun
- * 2021/1/19 21:28
+ *
+ * @author Json
+ * @date 2021/1/19 21:28
  */
 public class UserTokenInterceptor extends BaseInterceptor implements HandlerInterceptor {
 
@@ -30,7 +30,7 @@ public class UserTokenInterceptor extends BaseInterceptor implements HandlerInte
         String userToken = request.getHeader("headerUserToken");
 
         // 判断是否放行
-        boolean run = verifyUserIdToken(userId, userToken,REDIS_USER_TOKEN);
+        boolean run = verifyUserIdToken(userId, userToken, REDIS_USER_TOKEN);
 
         return run;
     }

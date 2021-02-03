@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by TongHaiJun
- * 2021/1/16 17:01
+ * @author Json
+ * @date 2021/1/16 17:01
  */
 public class BaseController {
 

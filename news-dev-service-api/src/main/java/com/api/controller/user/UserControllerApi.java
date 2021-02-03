@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 
 /**
- * Created by TongHaiJun
- * 2021/1/18 11:57
+ * @author Json
+ * @date 2021/1/18 11:57
  */
 @Api(value = "用户信息相关Controller", tags = "用户信息相关Controller")
 @RequestMapping("/user")

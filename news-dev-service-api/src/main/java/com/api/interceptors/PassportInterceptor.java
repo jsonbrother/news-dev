@@ -12,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by TongHaiJun
- * 2021/1/17 8:41
+ * 短信请求拦截
+ *
+ * @author Json
+ * @date 2021/1/17 8:41
  */
 public class PassportInterceptor implements HandlerInterceptor {
 

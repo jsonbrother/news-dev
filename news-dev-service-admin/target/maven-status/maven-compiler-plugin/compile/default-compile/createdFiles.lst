@@ -1,0 +1,4 @@
+com\admin\controller\FriendLinkController.class
+com\admin\repository\FriendLinkRepository.class
+com\admin\service\FriendLinkService.class
+com\admin\service\impl\FriendLinkServiceImpl.class

@@ -37,6 +37,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  data:
+    mongodb:
+      uri: mongodb://news:news123@121.4.149.240:27017
+      database: news-dev
 
 ############################################################
 #

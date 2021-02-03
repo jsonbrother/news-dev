@@ -7,10 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 import tk.mybatis.spring.annotation.MapperScan;
 
 /**
- * Created by TongHaiJun
- * 2021/1/24 15:40
+ * @author Json
+ * @date 2021/1/24 15:40
  */
-@SpringBootApplication(exclude = MongoAutoConfiguration.class)
+@SpringBootApplication
 @MapperScan(basePackages = "com.admin.mapper")
 @ComponentScan(basePackages = {"com", "org.n3r.idworker"})
 public class Application {

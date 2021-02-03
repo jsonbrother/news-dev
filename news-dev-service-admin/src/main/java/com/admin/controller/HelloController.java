@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by TongHaiJun
- * 2021/1/15 11:28
+ * @author Json
+ * @date 2021/1/15 11:28
  */
 @RestController
 public class HelloController implements HelloControllerApi {

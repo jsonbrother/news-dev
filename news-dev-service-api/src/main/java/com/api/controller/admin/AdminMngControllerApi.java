@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by TongHaiJun
- * 2021/1/24 20:11
+ * @author Json
+ * @date 2021/1/24 20:11
  */
 @Api(value = "管理员admin维护", tags = "管理员admin维护的Controller")
 @RequestMapping("/adminMng")

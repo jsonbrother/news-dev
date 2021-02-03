@@ -1,0 +1,4 @@
+com\pojo\bo\SaveFriendLinkBO.class
+com\validate\CheckUrl.class
+com\validate\CheckUrlValidate.class
+com\pojo\mo\FriendLinkMO.class

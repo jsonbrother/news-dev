@@ -1,6 +1,5 @@
 package com.api.aspect;
 
-import com.api.controller.user.PassportControllerApi;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -9,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by TongHaiJun
- * 2021/1/20 21:12
+ * service日志切面
+ *
+ * @author Json
+ * @date 2021/1/20 21:12
  */
 @Aspect
 @Component

@@ -18,15 +18,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Created by TongHaiJun
  * 2021/1/15 18:11
  */
+
+/**
+ * swagger2配置
+ *
+ * @author Json
+ * @date 2021/1/15 18:11
+ */
 @Configuration
 @EnableSwagger2
 public class Swagger2 {
 
-    // http://localhost:8088/swagger-ui.html     原路径
-    // http://localhost:8088/doc.html            新路径
-
     /**
      * 配置swagger2核心配置 docket
+     * http://localhost:8088/swagger-ui.html 原路径
+     * http://localhost:8088/doc.html 新路径
      */
     @Bean
     public Docket createRestApi() {

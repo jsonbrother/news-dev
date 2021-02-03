@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * 分页插件配置
- * <p>
- * Created by TongHaiJun
- * 2021/1/26 10:53
+ *
+ * @author Json
+ * @date 2021/1/26 10:53
  */
 @EnableConfigurationProperties(PageHelperProperties.class)
 @Configuration

@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
- * Created by TongHaiJun
- * 2021/1/16 9:17
+ * @author Json
+ * @date 2021/1/16 9:17
  */
 @Api(value = "用户注册登陆的Controller", tags = "用户注册登陆的Controller")
 @RequestMapping("passport")

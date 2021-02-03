@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created by TongHaiJun
- * 2021/1/24 20:17
+ * @author Json
+ * @date 2021/1/24 20:17
  */
 @RestController
 public class AdminMngController extends BaseController implements AdminMngControllerApi {

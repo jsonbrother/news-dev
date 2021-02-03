@@ -7,8 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Created by TongHaiJun
- * 2021/1/19 21:32
+ * 基础通用拦截
+ *
+ * @author Json
+ * @date 2021/1/19 21:32
  */
 public class BaseInterceptor {
 

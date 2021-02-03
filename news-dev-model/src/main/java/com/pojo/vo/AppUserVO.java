@@ -1,8 +1,10 @@
 package com.pojo.vo;
 
 /**
- * Created by TongHaiJun
- * 2021/1/18 19:56
+ * AppUser信息VO对象
+ *
+ * @author Json
+ * @date 2021/1/18 19:56
  */
 public class AppUserVO {
 

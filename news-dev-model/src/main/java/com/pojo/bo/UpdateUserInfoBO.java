@@ -8,9 +8,9 @@ import java.util.Date;
 
 /**
  * 完善用户信息BO对象
- * <p>
- * Created by TongHaiJun
- * 2021/1/18 17:39
+ *
+ * @author Json
+ * @date 2021/1/18 17:39
  */
 public class UpdateUserInfoBO {
 

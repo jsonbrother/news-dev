@@ -22,8 +22,8 @@ public enum ResponseStatusEnum {
     USER_UPDATE_ERROR(508, false, "用户信息更新失败，请联系管理员！"),
     USER_INACTIVE_ERROR(509, false, "请前往[账号设置]修改信息激活后再进行后续操作！"),
     FILE_UPLOAD_NULL_ERROR(510, false, "文件不能为空，请选择一个文件再上传！"),
-    FILE_UPLOAD_FAILD(511, false, "文件上传失败！"),
-    FILE_FORMATTER_FAILD(512, false, "文件图片格式不支持！"),
+    FILE_UPLOAD_FAIL(511, false, "文件上传失败！"),
+    FILE_FORMATTER_FAIL(512, false, "文件图片格式不支持！"),
     FILE_MAX_SIZE_ERROR(513, false, "仅支持500kb大小以下的图片上传！"),
     FILE_NOT_EXIST_ERROR(514, false, "你所查看的文件不存在！"),
 
@@ -37,6 +37,8 @@ public enum ResponseStatusEnum {
     ADMIN_NOT_EXIT_ERROR(567, false, "管理员不存在或密码错误！"),
     ADMIN_FACE_NULL_ERROR(568, false, "人脸信息不能为空！"),
     ADMIN_FACE_LOGIN_ERROR(569, false, "人脸识别失败，请重试！"),
+    FRIEND_LINK_DEL_ERROR(570, false, "友情链接删除失败！"),
+    CATEGORY_EXIST_ERROR(571, false, "文章分类已存在，请换一个分类名！"),
 
     // 人脸识别错误代码
     FACE_VERIFY_TYPE_ERROR(600, false, "人脸比对验证类型不正确！"),

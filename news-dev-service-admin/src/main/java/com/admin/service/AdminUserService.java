@@ -7,8 +7,8 @@ import com.result.PagedGridResult;
 import java.util.List;
 
 /**
- * Created by TongHaiJun
- * 2021/1/24 20:02
+ * @author Json
+ * @date 2021/1/24 20:02
  */
 public interface AdminUserService {
 

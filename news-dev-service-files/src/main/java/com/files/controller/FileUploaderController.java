@@ -76,7 +76,7 @@ public class FileUploaderController implements FileUploaderControllerApi {
             // 判断后缀是否符合我们的预定义规范
             if (!PICTURE_SUFFIX_PNG.equalsIgnoreCase(suffix) && !PICTURE_SUFFIX_JPG.equalsIgnoreCase(suffix)
                     && !PICTURE_SUFFIX_JPEG.equalsIgnoreCase(suffix)) {
-                return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_FORMATTER_FAILD);
+                return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_FORMATTER_FAIL);
             }
 
             // 3.执行上传
@@ -93,7 +93,7 @@ public class FileUploaderController implements FileUploaderControllerApi {
             // finalPath = fileResource.getHost() + path;
             finalPath = fileResource.getOssHost() + path;
         } else {
-            return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_FAILD);
+            return NewsJSONResult.errorCustom(ResponseStatusEnum.FILE_UPLOAD_FAIL);
         }
 
         return NewsJSONResult.success(finalPath);

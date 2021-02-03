@@ -6,8 +6,10 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Created by TongHaiJun
- * 2021/1/31 17:43
+ * 服务配置
+ *
+ * @author Json
+ * @date 2021/1/31 17:43
  */
 @Configuration
 public class CloudConfig {

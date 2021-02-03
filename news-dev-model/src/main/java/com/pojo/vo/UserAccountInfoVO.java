@@ -4,9 +4,9 @@ import java.util.Date;
 
 /**
  * 用户账户信息VO对象
- * <p>
- * Created by TongHaiJun
- * 2021/1/18 12:09
+ *
+ * @author Json
+ * @date 2021/1/18 12:09
  */
 public class UserAccountInfoVO {
 

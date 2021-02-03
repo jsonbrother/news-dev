@@ -3,10 +3,10 @@ package com.pojo.bo;
 import javax.validation.constraints.NotBlank;
 
 /**
- * 添加管理员的BO
- * <p>
- * Created by TongHaiJun
- * 2021/1/25 21:42
+ * 添加管理员BO对象
+ *
+ * @author Json
+ * @date 2021/1/25 21:42
  */
 public class NewAdminBO {
 

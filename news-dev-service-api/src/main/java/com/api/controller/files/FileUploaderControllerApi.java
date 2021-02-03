@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by TongHaiJun
- * 2021/1/22 20:21
+ * @author Json
+ * @date 2021/1/22 20:21
  */
 @Api(value = "文件上传的Controller", tags = "文件上传的Controller")
 @RequestMapping("/fs")

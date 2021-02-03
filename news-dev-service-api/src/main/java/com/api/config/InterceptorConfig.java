@@ -10,8 +10,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Created by TongHaiJun
- * 2021/1/17 8:55
+ * 拦截器配置
+ *
+ * @author Json
+ * @date 2021/1/17 8:55
  */
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
@@ -52,6 +54,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/adminMng/addNewAdmin")
                 .addPathPatterns("/adminMng/getAdminList")
                 .addPathPatterns("/fs/uploadToGridFS")
-                .addPathPatterns("/fs/readInGridFS");
+                .addPathPatterns("/fs/readInGridFS")
+                .addPathPatterns("/friendLinkMng/saveOrUpdateFriendLink")
+                .addPathPatterns("/friendLinkMng/getFriendLinkList")
+                .addPathPatterns("/friendLinkMng/deleteFriendLink");
     }
 }

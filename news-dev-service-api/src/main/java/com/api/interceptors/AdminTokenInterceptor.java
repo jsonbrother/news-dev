@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 管理员会话拦截器
- * <p>
- * Created by TongHaiJun
- * 2021/1/24 21:56
+ *
+ * @author Json
+ * @date 2021/1/24 21:56
  */
 public class AdminTokenInterceptor extends BaseInterceptor implements HandlerInterceptor {
 
