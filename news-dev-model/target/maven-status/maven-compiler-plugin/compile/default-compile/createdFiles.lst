@@ -1,4 +1,6 @@
 com\pojo\bo\SaveFriendLinkBO.class
 com\validate\CheckUrl.class
 com\validate\CheckUrlValidate.class
+com\pojo\Category.class
+com\pojo\bo\SaveCategoryBO.class
 com\pojo\mo\FriendLinkMO.class

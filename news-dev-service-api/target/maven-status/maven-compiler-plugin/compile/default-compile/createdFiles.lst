@@ -1,1 +1,3 @@
+com\api\controller\admin\CategoryMngControllerApi.class
+com\api\service\BaseService.class
 com\api\controller\admin\FriendLinkControllerApi.class

@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 /**
  * @author Json
@@ -21,7 +22,7 @@ public interface AdminMngControllerApi {
 
     @ApiOperation(value = "管理员登陆", notes = "管理员登陆", httpMethod = "POST")
     @PostMapping("/adminLogin")
-    NewsJSONResult adminLogin(@RequestBody AdminLoginBO adminLoginBO, BindingResult result, HttpServletResponse response);
+    NewsJSONResult adminLogin(@RequestBody @Valid AdminLoginBO adminLoginBO, BindingResult result, HttpServletResponse response);
 
     @ApiOperation(value = "查询admin用户名是否存在", notes = "查询admin用户名是否存在", httpMethod = "POST")
     @PostMapping("/adminIsExist")
@@ -29,7 +30,7 @@ public interface AdminMngControllerApi {
 
     @ApiOperation(value = "创建admin", notes = "创建admin", httpMethod = "POST")
     @PostMapping("/addNewAdmin")
-    NewsJSONResult addNewAdmin(@RequestBody NewAdminBO newAdminBO, BindingResult result);
+    NewsJSONResult addNewAdmin(@RequestBody @Valid NewAdminBO newAdminBO, BindingResult result);
 
     @ApiOperation(value = "查询admin列表", notes = "查询admin列表", httpMethod = "POST")
     @PostMapping("/getAdminList")

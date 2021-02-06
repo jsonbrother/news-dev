@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
+
 /**
  * @author Json
  * @date 2021/2/1 22:13
@@ -20,7 +22,7 @@ public interface FriendLinkControllerApi {
 
     @ApiOperation(value = "保存或修改友情链接", notes = "保存或修改友情链接", httpMethod = "POST")
     @PostMapping("/saveOrUpdateFriendLink")
-    NewsJSONResult saveOrUpdateFriendLink(@RequestBody SaveFriendLinkBO saveFriendLinkBO, BindingResult result);
+    NewsJSONResult saveOrUpdateFriendLink(@RequestBody @Valid SaveFriendLinkBO saveFriendLinkBO, BindingResult result);
 
     @ApiOperation(value = "查询友情链接列表", notes = "查询友情链接列表", httpMethod = "POST")
     @PostMapping("/getFriendLinkList")

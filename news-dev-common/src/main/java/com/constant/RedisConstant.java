@@ -29,4 +29,9 @@ public class RedisConstant {
      * 管理员Token令牌
      */
     public static final String REDIS_ADMIN_TOKEN = "redis_admin_token";
+
+    /**
+     * 文章分类信息
+     */
+    public static final String REDIS_ALL_CATEGORY = "redis_all_category";
 }

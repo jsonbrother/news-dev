@@ -27,6 +27,18 @@ public enum ResponseStatusEnum {
     FILE_MAX_SIZE_ERROR(513, false, "仅支持500kb大小以下的图片上传！"),
     FILE_NOT_EXIST_ERROR(514, false, "你所查看的文件不存在！"),
 
+    // 自定义系统级别异常 54x
+    SYSTEM_INDEX_OUT_OF_BOUNDS(541, false, "系统错误，数组越界！"),
+    SYSTEM_ARITHMETIC_BY_ZERO(542, false, "系统错误，无法除零！"),
+    SYSTEM_NULL_POINTER(543, false, "系统错误，空指针！"),
+    SYSTEM_NUMBER_FORMAT(544, false, "系统错误，数字转换异常！"),
+    SYSTEM_PARSE(545, false, "系统错误，解析异常！"),
+    SYSTEM_IO(546, false, "系统错误，IO输入输出异常！"),
+    SYSTEM_FILE_NOT_FOUND(547, false, "系统错误，文件未找到！"),
+    SYSTEM_CLASS_CAST(548, false, "系统错误，类型强制转换错误！"),
+    SYSTEM_PARSER_ERROR(549, false, "系统错误，解析出错！"),
+    SYSTEM_DATE_PARSER_ERROR(550, false, "系统错误，日期解析出错！"),
+
     // admin 管理系统 56x
     ADMIN_USERNAME_NULL_ERROR(561, false, "管理员登录名不能为空！"),
     ADMIN_USERNAME_EXIST_ERROR(562, false, "管理员登录名已存在！"),
@@ -42,8 +54,12 @@ public enum ResponseStatusEnum {
 
     // 人脸识别错误代码
     FACE_VERIFY_TYPE_ERROR(600, false, "人脸比对验证类型不正确！"),
-    FACE_VERIFY_LOGIN_ERROR(601, false, "人脸登录失败！");
+    FACE_VERIFY_LOGIN_ERROR(601, false, "人脸登录失败！"),
 
+    // 系统错误，未预期的错误 555
+    SYSTEM_ERROR(555, false, "系统繁忙，请稍后再试！"),
+    SYSTEM_OPERATION_ERROR(556, false, "操作失败，请重试或联系管理员"),
+    SYSTEM_RESPONSE_NO_INFO(557, false, "");
 
     /**
      * 响应业务状态

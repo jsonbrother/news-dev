@@ -1,4 +1,8 @@
 com\admin\controller\FriendLinkController.class
+com\admin\mapper\CategoryMapper.class
 com\admin\repository\FriendLinkRepository.class
+com\admin\service\impl\CategoryServiceImpl.class
 com\admin\service\FriendLinkService.class
 com\admin\service\impl\FriendLinkServiceImpl.class
+com\admin\controller\CategoryMngController.class
+com\admin\service\CategoryService.class
