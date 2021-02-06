@@ -7,7 +7,7 @@ import com.pojo.bo.UpdateUserInfoBO;
  * Created by TongHaiJun
  * 2021/1/17 10:22
  */
-public interface IUserService {
+public interface UserService {
 
     /***
      * 判断用户是否存在

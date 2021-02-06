@@ -2,10 +2,10 @@ package com.admin.service.impl;
 
 import com.admin.mapper.AdminUserMapper;
 import com.admin.service.AdminUserService;
+import com.api.service.BaseService;
 import com.enums.ResponseStatusEnum;
 import com.exception.NewsException;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.pojo.AdminUser;
 import com.pojo.bo.NewAdminBO;
 import com.result.PagedGridResult;
@@ -25,7 +25,7 @@ import java.util.List;
  * @date 2021/1/24 20:04
  */
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl extends BaseService implements AdminUserService {
 
     private final AdminUserMapper adminUserMapper;
     private final Sid sid;
@@ -84,18 +84,5 @@ public class AdminUserServiceImpl implements AdminUserService {
 
         return setterPagedGrid(adminUserList, page);
     }
-
-    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(list);
-
-        PagedGridResult grid = new PagedGridResult();
-        grid.setPage(page);
-        grid.setRows(list);
-        grid.setRecords(pageList.getPages());
-        grid.setTotal(pageList.getTotal());
-
-        return grid;
-    }
-
 
 }

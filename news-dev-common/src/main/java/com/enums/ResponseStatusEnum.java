@@ -26,6 +26,8 @@ public enum ResponseStatusEnum {
     FILE_FORMATTER_FAIL(512, false, "文件图片格式不支持！"),
     FILE_MAX_SIZE_ERROR(513, false, "仅支持500kb大小以下的图片上传！"),
     FILE_NOT_EXIST_ERROR(514, false, "你所查看的文件不存在！"),
+    USER_STATUS_ERROR(515, false, "用户状态参数出错！"),
+    USER_NOT_EXIST_ERROR(516, false, "用户不存在！"),
 
     // 自定义系统级别异常 54x
     SYSTEM_INDEX_OUT_OF_BOUNDS(541, false, "系统错误，数组越界！"),

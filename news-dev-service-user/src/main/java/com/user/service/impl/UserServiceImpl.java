@@ -8,7 +8,7 @@ import com.exception.NewsException;
 import com.pojo.AppUser;
 import com.pojo.bo.UpdateUserInfoBO;
 import com.user.mapper.AppUserMapper;
-import com.user.service.IUserService;
+import com.user.service.UserService;
 import com.utils.DateUtil;
 import com.utils.DesensitizationUtil;
 import com.utils.JsonUtils;
@@ -27,7 +27,7 @@ import java.util.Date;
  * 2021/1/17 10:23
  */
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserService {
 
     private final AppUserMapper appUserMapper;
     private final Sid sid;

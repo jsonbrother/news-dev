@@ -9,7 +9,7 @@ import com.pojo.bo.UpdateUserInfoBO;
 import com.pojo.vo.AppUserVO;
 import com.pojo.vo.UserAccountInfoVO;
 import com.result.NewsJSONResult;
-import com.user.service.IUserService;
+import com.user.service.UserService;
 import com.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -27,10 +27,10 @@ import java.util.Map;
 @RestController
 public class UserController extends BaseController implements UserControllerApi {
 
-    private final IUserService userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(IUserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

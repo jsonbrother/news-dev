@@ -27,7 +27,7 @@ public enum UserStatus {
      */
     public static boolean isUserStatusValid(Integer tempStatus) {
         if (tempStatus != null) {
-            return tempStatus.equals(INACTIVE.type) || tempStatus.equals(ACTIVE.type) || tempStatus.equals(tempStatus == FROZEN.type);
+            return tempStatus.equals(INACTIVE.type) || tempStatus.equals(ACTIVE.type) || tempStatus.equals(FROZEN.type);
         }
         return false;
     }

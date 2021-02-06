@@ -9,7 +9,7 @@ import com.enums.ResponseStatusEnum;
 import com.enums.UserStatus;
 import com.pojo.AppUser;
 import com.pojo.bo.RegistLoginBO;
-import com.user.service.IUserService;
+import com.user.service.UserService;
 import com.utils.IPUtil;
 import com.result.NewsJSONResult;
 import com.utils.JsonUtils;
@@ -37,10 +37,10 @@ public class PassportController extends BaseController implements PassportContro
     private final static Logger logger = LoggerFactory.getLogger(PassportControllerApi.class);
 
     private final SMSUtils smsUtils;
-    private final IUserService userService;
+    private final UserService userService;
 
     @Autowired
-    public PassportController(SMSUtils smsUtils, IUserService userService) {
+    public PassportController(SMSUtils smsUtils, UserService userService) {
         this.smsUtils = smsUtils;
         this.userService = userService;
     }

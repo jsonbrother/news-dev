@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
+ * 基础service
+ *
  * @author Json
  * @date 2021/2/6 15:36
  */
