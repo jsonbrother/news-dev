@@ -3,6 +3,7 @@ package com.pojo.bo;
 import com.validate.CheckUrl;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 保存友情链接BO对象
@@ -21,8 +22,8 @@ public class SaveFriendLinkBO {
     @CheckUrl
     private String linkUrl;
 
-    @NotBlank(message = "请选择保留或者删除")
-    private String isDelete;
+    @NotNull(message = "请选择保留或者删除")
+    private Integer isDelete;
 
     public String getId() {
         return id;
@@ -48,11 +49,11 @@ public class SaveFriendLinkBO {
         this.linkUrl = linkUrl;
     }
 
-    public String getIsDelete() {
+    public Integer getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(String isDelete) {
+    public void setIsDelete(Integer isDelete) {
         this.isDelete = isDelete;
     }
 

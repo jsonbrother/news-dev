@@ -12,6 +12,7 @@ com\pojo\vo\UserAccountInfoVO.class
 com\pojo\AdminUser.class
 com\pojo\Article.class
 com\pojo\mo\FriendLinkMO.class
+com\pojo\vo\ArticleDetailVO.class
 com\pojo\bo\AdminLoginBO.class
 com\pojo\bo\NewArticleBO.class
 com\pojo\Fans.class

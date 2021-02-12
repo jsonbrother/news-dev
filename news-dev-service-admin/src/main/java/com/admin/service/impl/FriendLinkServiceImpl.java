@@ -2,6 +2,7 @@ package com.admin.service.impl;
 
 import com.admin.repository.FriendLinkRepository;
 import com.admin.service.FriendLinkService;
+import com.enums.YesOrNo;
 import com.pojo.mo.FriendLinkMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,6 @@ public class FriendLinkServiceImpl implements FriendLinkService {
         this.friendLinkRepository = friendLinkRepository;
     }
 
-
     @Override
     public void saveOrUpdateFriendLink(FriendLinkMO friendLinkMO) {
         friendLinkRepository.save(friendLinkMO);
@@ -36,5 +36,11 @@ public class FriendLinkServiceImpl implements FriendLinkService {
     @Override
     public void deleteFriendLink(String linkId) {
         friendLinkRepository.deleteById(linkId);
+    }
+
+    @Override
+    public List<FriendLinkMO> queryPortalAllFriendLinkList() {
+        List<FriendLinkMO> list = friendLinkRepository.getAllByIsDelete(YesOrNo.NO.type);
+        return list;
     }
 }

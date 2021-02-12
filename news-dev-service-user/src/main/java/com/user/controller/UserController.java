@@ -18,7 +18,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by TongHaiJun
@@ -86,6 +89,19 @@ public class UserController extends BaseController implements UserControllerApi 
         return NewsJSONResult.success();
     }
 
+    @Override
+    public NewsJSONResult queryByIds(String userIds) {
+        if (StringUtils.isBlank(userIds)) {
+            return NewsJSONResult.errorCustom(ResponseStatusEnum.USER_NOT_EXIST_ERROR);
+        }
+
+        List<String> userIdList = JsonUtils.jsonToList(userIds, String.class);
+        assert userIdList != null;
+        List<AppUserVO> publisherList = userIdList.stream().map(this::getBasicUserInfo).collect(Collectors.toList());
+
+        return NewsJSONResult.success(publisherList);
+    }
+
     private AppUser getUser(String userId) {
         // 查询判断redis中是否存在该用户信息
         String userJson = redis.get(RedisConstant.REDIS_USER_INFO + ":" + userId);
@@ -102,4 +118,14 @@ public class UserController extends BaseController implements UserControllerApi 
         return appUser;
     }
 
+    private AppUserVO getBasicUserInfo(String userId) {
+        // 1. 根据userId查询用户的信息
+        AppUser user = getUser(userId);
+
+        // 2. 返回用户信息
+        AppUserVO userVO = new AppUserVO();
+        BeanUtils.copyProperties(user, userVO);
+
+        return userVO;
+    }
 }

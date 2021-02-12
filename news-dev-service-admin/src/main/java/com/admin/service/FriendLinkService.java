@@ -16,13 +16,18 @@ public interface FriendLinkService {
     void saveOrUpdateFriendLink(FriendLinkMO friendLinkMO);
 
     /**
-     * 新增或者更新友情链接
+     * 查询友情链接
      */
     List<FriendLinkMO> queryAllFriendLinkList();
 
     /**
-     * 新增或者更新友情链接
+     * 删除友情链接
      */
     void deleteFriendLink(String linkId);
+
+    /**
+     * 门户查询友情链接
+     */
+    List<FriendLinkMO> queryPortalAllFriendLinkList();
 
 }

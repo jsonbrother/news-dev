@@ -1,8 +1,10 @@
+E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\vo\ArticleDetailVO.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\Category.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\AppUser.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\bo\NewAdminBO.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\bo\SaveFriendLinkBO.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\bo\SaveCategoryBO.java
+E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\vo\IndexArticleVO.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\pojo\Article.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\validate\CheckUrl.java
 E:\idea project\news-dev\news-dev-model\src\main\java\com\validate\CheckUrlValidate.java

@@ -74,4 +74,9 @@ public class FriendLinkController extends BaseController implements FriendLinkCo
 
         return NewsJSONResult.success();
     }
+
+    @Override
+    public NewsJSONResult queryPortalAllFriendLinkList() {
+        return NewsJSONResult.success(friendLinkService.queryPortalAllFriendLinkList());
+    }
 }

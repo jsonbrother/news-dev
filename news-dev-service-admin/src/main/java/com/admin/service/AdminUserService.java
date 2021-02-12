@@ -4,8 +4,6 @@ import com.pojo.AdminUser;
 import com.pojo.bo.NewAdminBO;
 import com.result.PagedGridResult;
 
-import java.util.List;
-
 /**
  * @author Json
  * @date 2021/1/24 20:02
