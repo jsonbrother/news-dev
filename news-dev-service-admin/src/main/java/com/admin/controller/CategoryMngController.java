@@ -84,10 +84,10 @@ public class CategoryMngController extends BaseController implements CategoryMng
         String allCatJson = redis.get(RedisConstant.REDIS_ALL_CATEGORY);
 
         List<Category> categoryList;
-        if (StringUtils.isBlank(allCatJson)) { // 如果有则返回
+        if (StringUtils.isBlank(allCatJson)) { // 如果没有则查询数据库库后先放缓存再返回
             categoryList = categoryService.queryCategoryList();
             redis.set(RedisConstant.REDIS_ALL_CATEGORY, JsonUtils.objectToJson(categoryList));
-        } else { // 如果没有则查询数据库库后先放缓存再返回
+        } else { // 如果有则返回
             categoryList = JsonUtils.jsonToList(allCatJson, Category.class);
         }
 

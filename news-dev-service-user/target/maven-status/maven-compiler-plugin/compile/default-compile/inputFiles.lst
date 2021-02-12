@@ -1,7 +1,10 @@
 E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\Application.java
 E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\service\impl\UserServiceImpl.java
-E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\service\IUserService.java
 E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\controller\UserController.java
 E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\mapper\FansMapper.java
+E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\service\UserService.java
 E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\controller\PassportController.java
+E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\controller\UserMngController.java
 E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\mapper\AppUserMapper.java
+E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\service\impl\UserMngServiceImpl.java
+E:\idea project\news-dev\news-dev-service-user\src\main\java\com\user\service\UserMngService.java

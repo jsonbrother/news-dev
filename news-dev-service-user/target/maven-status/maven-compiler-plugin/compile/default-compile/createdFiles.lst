@@ -1,1 +1,10 @@
+com\user\service\impl\UserServiceImpl.class
+com\user\controller\UserMngController.class
+com\user\service\impl\UserMngServiceImpl.class
+com\user\service\UserService.class
+com\user\controller\UserController.class
+com\user\service\UserMngService.class
+com\user\mapper\AppUserMapper.class
 com\user\Application.class
+com\user\controller\PassportController.class
+com\user\mapper\FansMapper.class

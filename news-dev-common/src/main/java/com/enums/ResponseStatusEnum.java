@@ -54,6 +54,16 @@ public enum ResponseStatusEnum {
     FRIEND_LINK_DEL_ERROR(570, false, "友情链接删除失败！"),
     CATEGORY_EXIST_ERROR(571, false, "文章分类已存在，请换一个分类名！"),
 
+    // 媒体中心 相关错误 58x
+    ARTICLE_COVER_NOT_EXIST_ERROR(580, false, "文章封面不存在，请选择一个！"),
+    ARTICLE_CATEGORY_NOT_EXIST_ERROR(581, false, "请选择正确的文章领域！"),
+    ARTICLE_CREATE_ERROR(582, false, "创建文章失败，请重试或联系管理员！"),
+    ARTICLE_QUERY_PARAMS_ERROR(583, false, "文章列表查询参数错误！"),
+    ARTICLE_DELETE_ERROR(584, false, "文章删除失败！"),
+    ARTICLE_WITHDRAW_ERROR(585, false, "文章撤回失败！"),
+    ARTICLE_REVIEW_ERROR(585, false, "文章审核出错！"),
+    ARTICLE_ALREADY_READ_ERROR(586, false, "文章重复阅读！"),
+
     // 人脸识别错误代码
     FACE_VERIFY_TYPE_ERROR(600, false, "人脸比对验证类型不正确！"),
     FACE_VERIFY_LOGIN_ERROR(601, false, "人脸登录失败！"),

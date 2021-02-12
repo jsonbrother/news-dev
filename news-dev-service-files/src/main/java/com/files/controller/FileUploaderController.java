@@ -27,6 +27,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by TongHaiJun
@@ -57,7 +59,6 @@ public class FileUploaderController implements FileUploaderControllerApi {
 
     @Override
     public NewsJSONResult uploadFace(String userId, MultipartFile file) throws Exception {
-
 
         // 1.判断参数 不能为空
         if (StringUtils.isBlank(userId)) {
@@ -97,6 +98,52 @@ public class FileUploaderController implements FileUploaderControllerApi {
         }
 
         return NewsJSONResult.success(finalPath);
+    }
+
+    @Override
+    public NewsJSONResult uploadSomeFiles(String userId, MultipartFile[] files) throws Exception {
+
+        // 1.声明list 用户存放多个图片的地址路径 返回到前端
+        List<String> imageUrlList = new ArrayList<>();
+
+        // 2.循环获得文件上传的名称
+        if (files != null && files.length > 0) {
+            for (MultipartFile file : files) {
+                String path = "";
+                if (file != null) {
+                    // 3.获得文件上传的名称
+                    String fileName = file.getOriginalFilename();
+                    if (StringUtils.isNotBlank(fileName)) {
+                        String[] fileNameArr = fileName.split("\\.");
+                        // 获得文件后缀
+                        String suffix = fileNameArr[fileNameArr.length - 1];
+                        // 判断后缀是否符合我们的预定义规范
+                        if (!PICTURE_SUFFIX_PNG.equalsIgnoreCase(suffix) && !PICTURE_SUFFIX_JPG.equalsIgnoreCase(suffix)
+                                && !PICTURE_SUFFIX_JPEG.equalsIgnoreCase(suffix)) {
+                            continue;
+                        }
+
+                        // 4.执行上传
+                        path = uploaderService.uploadOss(file, userId, suffix);
+                    } else {
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+
+                // 4.获得文件上传地址
+                String finalPath;
+                if (StringUtils.isNotBlank(path)) {
+                    // finalPath = fileResource.getHost() + path;
+                    finalPath = fileResource.getOssHost() + path;
+                    // FIXME: 放入到imageUrlList之前，需要对图片做一次审核
+                    imageUrlList.add(finalPath);
+                }
+            }
+        }
+
+        return NewsJSONResult.success(imageUrlList);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.admin.controller;
+package com.article.controller;
 
 import com.api.controller.user.HelloControllerApi;
 import com.result.NewsJSONResult;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Json
- * @date 2021/1/15 11:28
+ * @date 2021/2/6 21:50
  */
 @RestController
 public class HelloController implements HelloControllerApi {
@@ -20,17 +20,5 @@ public class HelloController implements HelloControllerApi {
         logger.info("info: hello~");
         return NewsJSONResult.success();
     }
-
-    @Override
-    public Object redis() {
-        return null;
-    }
-
-//    public static void main(String[] args) {
-//
-//        String pwd = BCrypt.hashpw("admin", BCrypt.gensalt());
-//        System.out.println(pwd);
-//
-//    }
 
 }

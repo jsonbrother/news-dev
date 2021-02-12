@@ -1,6 +1,17 @@
+com\pojo\bo\RegistLoginBO.class
 com\pojo\bo\SaveFriendLinkBO.class
 com\validate\CheckUrl.class
+com\pojo\bo\NewAdminBO.class
 com\validate\CheckUrlValidate.class
+com\pojo\bo\UpdateUserInfoBO.class
+com\pojo\AppUser.class
+com\pojo\vo\AppUserVO.class
 com\pojo\Category.class
 com\pojo\bo\SaveCategoryBO.class
+com\pojo\vo\UserAccountInfoVO.class
+com\pojo\AdminUser.class
+com\pojo\Article.class
 com\pojo\mo\FriendLinkMO.class
+com\pojo\bo\AdminLoginBO.class
+com\pojo\bo\NewArticleBO.class
+com\pojo\Fans.class

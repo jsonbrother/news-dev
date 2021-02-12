@@ -17,9 +17,27 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/fs")
 public interface FileUploaderControllerApi {
 
-    @ApiOperation(value = "上传用户头像", notes = "上传用户头像", httpMethod = "POST")
+    /**
+     * 上传单个图片
+     *
+     * @param userId 用户id
+     * @param file   上传图片
+     * @return 应答
+     * @throws Exception 异常信息
+     */
     @PostMapping("/uploadFace")
     NewsJSONResult uploadFace(@RequestParam String userId, MultipartFile file) throws Exception;
+
+    /**
+     * 上传多个图片
+     *
+     * @param userId 用户id
+     * @param files  上传多个图片
+     * @return 应答
+     * @throws Exception 异常信息
+     */
+    @PostMapping("/uploadSomeFiles")
+    NewsJSONResult uploadSomeFiles(@RequestParam String userId, MultipartFile[] files) throws Exception;
 
     /**
      * 文件上传到mongodb的gridFS中

@@ -1,1 +1,7 @@
+com\files\service\UploaderService.class
+com\files\Application.class
+META-INF\spring-configuration-metadata.json
 com\files\config\GridFsConfig.class
+com\files\service\impl\UploaderServiceImpl.class
+com\files\controller\FileUploaderController.class
+com\files\resource\FileResource.class

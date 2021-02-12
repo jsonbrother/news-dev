@@ -7,7 +7,6 @@ import com.constant.RedisConstant;
 import com.enums.ResponseStatusEnum;
 import com.exception.NewsException;
 import com.pojo.Category;
-import com.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -49,21 +49,21 @@ public class AliImageReviewUtils {
 
 
         JSONObject httpBody = new JSONObject();
-        /**
-         * 设置要检测的场景, 计费是按照该处传递的场景进行
-         * 一次请求中可以同时检测多张图片，每张图片可以同时检测多个风险场景，计费按照场景计算
-         * 例如：检测2张图片，场景传递porn、terrorism，计费会按照2张图片鉴黄，2张图片暴恐检测计算
-         * porn: porn表示色情场景检测
-         * logo: 商标
-         * 其他详见官方文档
+        /*
+          设置要检测的场景, 计费是按照该处传递的场景进行
+          一次请求中可以同时检测多张图片，每张图片可以同时检测多个风险场景，计费按照场景计算
+          例如：检测2张图片，场景传递porn、terrorism，计费会按照2张图片鉴黄，2张图片暴恐检测计算
+          porn: porn表示色情场景检测
+          logo: 商标
+          其他详见官方文档
          */
         httpBody.put("scenes", Collections.singletonList("terrorism"));
 
-        /**
-         * 设置待检测图片， 一张图片一个task
-         * 多张图片同时检测时，处理的时间由最后一个处理完的图片决定
-         * 通常情况下批量检测的平均rt比单张检测的要长, 一次批量提交的图片数越多，rt被拉长的概率越高
-         * 这里以单张图片检测作为示例, 如果是批量图片检测，请自行构建多个task
+        /*
+          设置待检测图片， 一张图片一个task
+          多张图片同时检测时，处理的时间由最后一个处理完的图片决定
+          通常情况下批量检测的平均rt比单张检测的要长, 一次批量提交的图片数越多，rt被拉长的概率越高
+          这里以单张图片检测作为示例, 如果是批量图片检测，请自行构建多个task
          */
         JSONObject task = new JSONObject();
         task.put("dataId", UUID.randomUUID().toString());
@@ -76,9 +76,9 @@ public class AliImageReviewUtils {
         imageSyncScanRequest.setHttpContent(org.apache.commons.codec.binary.StringUtils.getBytesUtf8(httpBody.toJSONString()),
                 "UTF-8", FormatType.JSON);
 
-        /**
-         * 请设置超时时间, 服务端全链路处理超时时间为10秒，请做相应设置
-         * 如果您设置的ReadTimeout小于服务端处理的时间，程序中会获得一个read timeout异常
+        /*
+          请设置超时时间, 服务端全链路处理超时时间为10秒，请做相应设置
+          如果您设置的ReadTimeout小于服务端处理的时间，程序中会获得一个read timeout异常
          */
         imageSyncScanRequest.setConnectTimeout(3000);
         imageSyncScanRequest.setReadTimeout(10000);

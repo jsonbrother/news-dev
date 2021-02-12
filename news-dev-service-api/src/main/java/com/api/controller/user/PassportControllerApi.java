@@ -16,7 +16,7 @@ import javax.validation.Valid;
  * @date 2021/1/16 9:17
  */
 @Api(value = "用户注册登陆的Controller", tags = "用户注册登陆的Controller")
-@RequestMapping("passport")
+@RequestMapping("/passport")
 public interface PassportControllerApi {
 
     @ApiOperation(value = "获得短信验证码", notes = "获得短信验证码", httpMethod = "GET")
@@ -30,6 +30,6 @@ public interface PassportControllerApi {
 
     @ApiOperation(value = "用户退出登陆", notes = "用户退出登陆", httpMethod = "POST")
     @PostMapping("/logout")
-    NewsJSONResult logout(@RequestBody String userId, HttpServletRequest request, HttpServletResponse response);
+    NewsJSONResult logout(@RequestParam String userId, HttpServletRequest request, HttpServletResponse response);
 
 }
