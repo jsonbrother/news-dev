@@ -7,6 +7,7 @@ import com.enums.UserStatus;
 import com.exception.NewsException;
 import com.pojo.AppUser;
 import com.pojo.bo.UpdateUserInfoBO;
+import com.pojo.vo.PublisherVO;
 import com.user.mapper.AppUserMapper;
 import com.user.service.UserService;
 import com.utils.DateUtil;
@@ -21,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by TongHaiJun
@@ -107,5 +111,12 @@ public class UserServiceImpl implements UserService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<PublisherVO> getUserList(List<String> userIdList) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userIdList", userIdList);
+        return appUserMapper.getUserList(map);
     }
 }

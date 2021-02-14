@@ -34,4 +34,14 @@ public class RedisConstant {
      * 文章分类信息
      */
     public static final String REDIS_ALL_CATEGORY = "redis_all_category";
+
+    /**
+     * 作家粉丝数
+     */
+    public static final String REDIS_WRITER_FANS_COUNTS = "redis_writer_fans_counts";
+
+    /**
+     * 当前用户的（我的）关注数
+     */
+    public static final String REDIS_MY_FOLLOW_COUNTS = "redis_my_follow_counts";
 }

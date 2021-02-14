@@ -2,6 +2,9 @@ package com.user.service;
 
 import com.pojo.AppUser;
 import com.pojo.bo.UpdateUserInfoBO;
+import com.pojo.vo.PublisherVO;
+
+import java.util.List;
 
 /**
  * Created by TongHaiJun
@@ -35,4 +38,9 @@ public interface UserService {
      * @param userInfoBO 用户信息
      */
     void updateAppUserInfo(UpdateUserInfoBO userInfoBO);
+
+    /**
+     * 根据用户id查询用户
+     */
+    public List<PublisherVO> getUserList(List<String> userIdList);
 }

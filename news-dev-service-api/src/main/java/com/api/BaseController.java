@@ -2,6 +2,7 @@ package com.api;
 
 import com.constant.CookieConstant;
 import com.utils.RedisOperator;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
@@ -79,6 +80,12 @@ public class BaseController {
         response.addCookie(cookie);
     }
 
+    /**
+     * 删除cookie
+     *
+     * @param response 请求对象
+     * @param name     cookie的key
+     */
     protected void delCookie(HttpServletResponse response, String name) {
         try {
             String delValue = URLEncoder.encode("", "UTF-8");
@@ -86,5 +93,13 @@ public class BaseController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    protected Integer getCountsFromRedis(String key) {
+        String countsStr = redis.get(key);
+        if (StringUtils.isBlank(countsStr)) {
+            countsStr = "0";
+        }
+        return Integer.valueOf(countsStr);
     }
 }

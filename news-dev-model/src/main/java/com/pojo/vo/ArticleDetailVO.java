@@ -9,15 +9,24 @@ import java.util.Date;
  * @date 2021/2/12 17:18
  */
 public class ArticleDetailVO {
+
     private String id;
     private String title;
+
     private String cover;
+
     private Integer categoryId;
+
     private String categoryName;
+
     private String publishUserId;
+
     private Date publishTime;
+
     private String content;
+
     private String publishUserName;
+
     private Integer readCounts;
 
     public String getId() {

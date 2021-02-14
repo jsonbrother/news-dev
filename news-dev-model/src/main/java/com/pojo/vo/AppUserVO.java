@@ -25,6 +25,16 @@ public class AppUserVO {
      */
     private Integer activeStatus;
 
+    /**
+     * 我的关注数
+     */
+    private Integer myFollowCounts;
+
+    /**
+     * 我的粉丝数
+     */
+    private Integer myFansCounts;
+
     public String getId() {
         return id;
     }
@@ -57,6 +67,22 @@ public class AppUserVO {
         this.activeStatus = activeStatus;
     }
 
+    public Integer getMyFollowCounts() {
+        return myFollowCounts;
+    }
+
+    public void setMyFollowCounts(Integer myFollowCounts) {
+        this.myFollowCounts = myFollowCounts;
+    }
+
+    public Integer getMyFansCounts() {
+        return myFansCounts;
+    }
+
+    public void setMyFansCounts(Integer myFansCounts) {
+        this.myFansCounts = myFansCounts;
+    }
+
     @Override
     public String toString() {
         return "AppUserVO{" +
@@ -64,6 +90,8 @@ public class AppUserVO {
                 ", nickName='" + nickName + '\'' +
                 ", face='" + face + '\'' +
                 ", activeStatus=" + activeStatus +
+                ", myFollowCounts=" + myFollowCounts +
+                ", myFansCounts=" + myFansCounts +
                 '}';
     }
 }

@@ -1,4 +1,5 @@
 com\api\config\CloudConfig.class
+com\api\controller\user\MyFansControllerApi.class
 com\my\mapper\MyMapper.class
 com\api\controller\admin\AdminMngControllerApi.class
 com\api\config\CorsConfig.class

@@ -21,4 +21,17 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
     </resultMap>
+
+    <select id="getUserList" parameterType="Map" resultType="com.pojo.vo.PublisherVO">
+        select
+        tau.id as userId,tau.nick_name as nickName,tau.face as face
+        from tb_app_user tau
+        where
+        tau.id in
+        <foreach item="item" index="index" collection="userIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </select>
+
 </mapper>

@@ -60,12 +60,27 @@ public class ArticlePortalServiceImpl extends BaseService implements ArticlePort
 
     @Override
     public PagedGridResult queryArticleListOfWriter(String writerId, Integer page, Integer pageSize) {
-        return null;
+        Example articleExample = new Example(Article.class);
+
+        Example.Criteria criteria = setDefaultArticleExample(articleExample);
+        criteria.andEqualTo("publishUserId", writerId);
+
+        PageHelper.startPage(page, pageSize);
+        List<Article> list = articleMapper.selectByExample(articleExample);
+        return setterPagedGrid(list, page);
     }
 
     @Override
     public PagedGridResult queryGoodArticleListOfWriter(String writerId) {
-        return null;
+        Example articleExample = new Example(Article.class);
+        articleExample.orderBy("publishTime").desc();
+
+        Example.Criteria criteria = setDefaultArticleExample(articleExample);
+        criteria.andEqualTo("publishUserId", writerId);
+
+        PageHelper.startPage(1, 5);
+        List<Article> list = articleMapper.selectByExample(articleExample);
+        return setterPagedGrid(list, 1);
     }
 
     @Override
