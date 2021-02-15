@@ -11,22 +11,50 @@ import java.util.Date;
 public class ArticleDetailVO {
 
     private String id;
+
+    /**
+     * 文章标题
+     */
     private String title;
 
+    /**
+     * 文章封面
+     */
     private String cover;
 
+    /**
+     * 分类Id
+     */
     private Integer categoryId;
 
+    /**
+     * 分类名称
+     */
     private String categoryName;
 
+    /**
+     * 发布者
+     */
     private String publishUserId;
 
+    /**
+     * 发布时间
+     */
     private Date publishTime;
 
+    /**
+     * 文章内容
+     */
     private String content;
 
+    /**
+     * 发布者姓名
+     */
     private String publishUserName;
 
+    /**
+     * 阅读数
+     */
     private Integer readCounts;
 
     public String getId() {

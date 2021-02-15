@@ -55,7 +55,7 @@ public interface FileUploaderControllerApi {
      * @param faceId 人脸Id
      * @throws Exception 异常信息
      */
-    @GetMapping("readInGridFS")
+    @GetMapping("/readInGridFS")
     void readInGridFs(@RequestParam String faceId, HttpServletResponse response) throws Exception;
 
     /**
@@ -64,6 +64,6 @@ public interface FileUploaderControllerApi {
      * @param faceId 人脸Id
      * @throws Exception 异常信息
      */
-    @GetMapping("readFace64InGridFS")
+    @GetMapping("/readFace64InGridFS")
     NewsJSONResult readFace64InGridFs(@RequestParam String faceId) throws Exception;
 }

@@ -1,9 +1,6 @@
 package com.api.config;
 
-import com.api.interceptors.AdminTokenInterceptor;
-import com.api.interceptors.PassportInterceptor;
-import com.api.interceptors.UserActiveInterceptor;
-import com.api.interceptors.UserTokenInterceptor;
+import com.api.interceptors.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -29,6 +26,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    public ArticleReadInterceptor articleReadInterceptor() {
+        return new ArticleReadInterceptor();
+    }
+
+    @Bean
     public UserActiveInterceptor userActiveInterceptor() {
         return new UserActiveInterceptor();
     }
@@ -48,10 +50,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/user/getAccountInfo")
                 .addPathPatterns("/user/updateUserInfo")
                 .addPathPatterns("/fs/uploadFace")
-                .addPathPatterns("/fs/uploadSomeFiles");
+                .addPathPatterns("/fs/uploadSomeFiles")
+                .addPathPatterns("/fans/follow")
+                .addPathPatterns("/fans/unFollow");
 
         registry.addInterceptor(userActiveInterceptor())
-                .addPathPatterns("/fs/uploadSomeFiles");
+                .addPathPatterns("/fs/uploadSomeFiles")
+                .addPathPatterns("/fans/follow")
+                .addPathPatterns("/fans/unFollow");
 
         registry.addInterceptor(adminTokenInterceptor())
                 .addPathPatterns("/adminMng/adminIsExist")
@@ -61,6 +67,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/fs/readInGridFS")
                 .addPathPatterns("/friendLinkMng/saveOrUpdateFriendLink")
                 .addPathPatterns("/friendLinkMng/getFriendLinkList")
-                .addPathPatterns("/friendLinkMng/deleteFriendLink");
+                .addPathPatterns("/friendLinkMng/deleteFriendLink")
+                .addPathPatterns("/categoryMng/saveOrUpdateCategory")
+                .addPathPatterns("/categoryMng/getCatList");
+
+        registry.addInterceptor(articleReadInterceptor())
+                .addPathPatterns("/portal/article/readArticle");
     }
 }

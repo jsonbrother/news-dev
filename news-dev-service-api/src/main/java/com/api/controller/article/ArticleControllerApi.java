@@ -26,13 +26,13 @@ public interface ArticleControllerApi {
     @PostMapping("/createArticle")
     NewsJSONResult createArticle(@RequestBody @Valid NewArticleBO newArticleBO, BindingResult result);
 
-    @PostMapping("queryMyList")
+    @PostMapping("/queryMyList")
     @ApiOperation(value = "查询用户的所有文章列表", notes = "查询用户的所有文章列表", httpMethod = "POST")
     NewsJSONResult queryMyList(@RequestParam String userId, @RequestParam String keyword, @RequestParam Integer status,
                                @RequestParam Date startDate, @RequestParam Date endDate,
                                @RequestParam Integer page, @RequestParam Integer pageSize);
 
-    @PostMapping("queryAllList")
+    @PostMapping("/queryAllList")
     @ApiOperation(value = "管理员查询用户的所有文章列表", notes = "管理员查询用户的所有文章列表", httpMethod = "POST")
     NewsJSONResult queryAllList(@RequestParam Integer status,
                                 @ApiParam(name = "page", value = "查询下一页的第几页")
@@ -40,7 +40,7 @@ public interface ArticleControllerApi {
                                 @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
                                 @RequestParam Integer pageSize);
 
-    @PostMapping("doReview")
+    @PostMapping("/doReview")
     @ApiOperation(value = "管理员对文章进行审核通过或者失败", notes = "管理员对文章进行审核通过或者失败", httpMethod = "POST")
     NewsJSONResult doReview(@RequestParam String articleId, @RequestParam Integer passOrNot);
 

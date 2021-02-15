@@ -12,6 +12,7 @@ com\api\service\BaseService.class
 com\api\controller\article\ArticleControllerApi.class
 com\api\controller\admin\FriendLinkControllerApi.class
 com\api\BaseController.class
+com\api\interceptors\ArticleReadInterceptor.class
 com\api\interceptors\AdminTokenInterceptor.class
 com\api\interceptors\UserTokenInterceptor.class
 com\api\controller\files\FileUploaderControllerApi.class

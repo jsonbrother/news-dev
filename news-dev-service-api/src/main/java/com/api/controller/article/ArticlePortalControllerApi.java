@@ -28,12 +28,12 @@ public interface ArticlePortalControllerApi {
                         @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
                         @RequestParam Integer pageSize);
 
-    @GetMapping("hotList")
+    @GetMapping("/hotList")
     @ApiOperation(value = "首页查询热闻列表", notes = "首页查询热闻列表", httpMethod = "GET")
     NewsJSONResult hotList();
 
 
-    @GetMapping("queryArticleListOfWriter")
+    @GetMapping("/queryArticleListOfWriter")
     @ApiOperation(value = "查询作家发布的所有文章列表", notes = "查询作家发布的所有文章列表", httpMethod = "GET")
     NewsJSONResult queryArticleListOfWriter(@RequestParam String writerId,
                                             @ApiParam(name = "page", value = "查询下一页的第几页")
@@ -41,15 +41,15 @@ public interface ArticlePortalControllerApi {
                                             @ApiParam(name = "pageSize", value = "分页的每一页显示的条数")
                                             @RequestParam Integer pageSize);
 
-    @GetMapping("queryGoodArticleListOfWriter")
+    @GetMapping("/queryGoodArticleListOfWriter")
     @ApiOperation(value = "作家页面查询近期佳文", notes = "作家页面查询近期佳文", httpMethod = "GET")
     NewsJSONResult queryGoodArticleListOfWriter(@RequestParam String writerId);
 
-    @GetMapping("detail")
+    @GetMapping("/detail")
     @ApiOperation(value = "文章详情查询", notes = "文章详情查询", httpMethod = "GET")
     NewsJSONResult detail(@RequestParam String articleId);
 
-    @PostMapping("readArticle")
+    @PostMapping("/readArticle")
     @ApiOperation(value = "阅读文章，文章阅读量累加", notes = "阅读文章，文章阅读量累加", httpMethod = "POST")
     NewsJSONResult readArticle(@RequestParam String articleId, HttpServletRequest request);
 }

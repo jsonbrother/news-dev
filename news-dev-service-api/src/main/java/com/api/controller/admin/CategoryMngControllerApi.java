@@ -20,16 +20,16 @@ import javax.validation.Valid;
 @RequestMapping("/categoryMng")
 public interface CategoryMngControllerApi {
 
-    @PostMapping("saveOrUpdateCategory")
+    @PostMapping("/saveOrUpdateCategory")
     @ApiOperation(value = "新增或修改分类", notes = "新增或修改分类", httpMethod = "POST")
-    public NewsJSONResult saveOrUpdateCategory(@RequestBody @Valid SaveCategoryBO newCategoryBO, BindingResult result);
+    NewsJSONResult saveOrUpdateCategory(@RequestBody @Valid SaveCategoryBO newCategoryBO, BindingResult result);
 
-    @PostMapping("getCatList")
+    @PostMapping("/getCatList")
     @ApiOperation(value = "查询分类列表", notes = "查询分类列表", httpMethod = "POST")
-    public NewsJSONResult getCatList();
+    NewsJSONResult getCatList();
 
-    @GetMapping("getCats")
+    @GetMapping("/getCats")
     @ApiOperation(value = "用户端查询分类列表", notes = "用户端查询分类列表", httpMethod = "GET")
-    public NewsJSONResult getCats();
+    NewsJSONResult getCats();
 
 }

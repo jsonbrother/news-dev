@@ -26,7 +26,7 @@ public interface UserMngControllerApi {
     @PostMapping("/userDetail")
     NewsJSONResult userDetail(@RequestParam String userId);
 
-    @PostMapping("freezeUserOrNot")
+    @PostMapping("/freezeUserOrNot")
     @ApiOperation(value = "冻结用户或者解冻用户", notes = "冻结用户或者解冻用户", httpMethod = "POST")
     NewsJSONResult freezeUserOrNot(@RequestParam String userId, @RequestParam Integer doStatus);
 }

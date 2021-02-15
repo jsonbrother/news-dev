@@ -3,12 +3,16 @@ package com.article.controller;
 import com.api.BaseController;
 import com.api.controller.article.ArticlePortalControllerApi;
 import com.article.service.ArticlePortalService;
+import com.constant.RedisConstant;
 import com.pojo.Article;
 import com.pojo.vo.AppUserVO;
+import com.pojo.vo.ArticleDetailVO;
 import com.pojo.vo.IndexArticleVO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
+import com.utils.IPUtil;
 import com.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -95,11 +99,28 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 
     @Override
     public NewsJSONResult detail(String articleId) {
-        return NewsJSONResult.success();
+        ArticleDetailVO detailVO = articlePortalService.queryDetail(articleId);
+
+        Set<String> idSet = new HashSet<>();
+        idSet.add(detailVO.getPublishUserId());
+        Map<String, AppUserVO> publisherMap = getPublisherMap(idSet);
+
+        if (!publisherMap.isEmpty()) {
+            detailVO.setPublishUserName(publisherMap.get(detailVO.getPublishUserId()).getNickName());
+        }
+
+        detailVO.setReadCounts(getCountsFromRedis(RedisConstant.REDIS_ARTICLE_READ_COUNTS + ":" + articleId));
+
+        return NewsJSONResult.success(detailVO);
     }
 
     @Override
     public NewsJSONResult readArticle(String articleId, HttpServletRequest request) {
+        String userIp = IPUtil.getRequestIp(request);
+        // 设置针对当前用户ip的永久存在的key 存入到redis 表示该ip的用户已经阅读过了 无法累加阅读量
+        redis.setnx(RedisConstant.REDIS_ALREADY_READ + ":" + articleId + ":" + userIp, userIp);
+
+        redis.increment(RedisConstant.REDIS_ARTICLE_READ_COUNTS + ":" + articleId, 1);
         return NewsJSONResult.success();
     }
 
@@ -113,24 +134,39 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 
         // 1. 构建发布者id列表
         Set<String> idSet = new HashSet<>();
+        List<String> idList = new ArrayList<>();
         for (Article article : articleList) {
             // 1.1 构建发布者的set
             idSet.add(article.getPublishUserId());
+            // 1.2 构建文章id的list
+            idList.add(RedisConstant.REDIS_ARTICLE_READ_COUNTS + ":" + article.getId());
         }
         logger.info("idSet:{}", idSet.toString());
 
         // 2.发起远程调用（restTemplate） 请求用户服务获得用户（idSet 发布者）的列表
-        Map<String, AppUserVO> publisherMap = getPublisherList(idSet);
+        Map<String, AppUserVO> publisherMap = getPublisherMap(idSet);
+        // 发起redis的mget批量查询api，获得对应的值
+        List<String> readCountsRedisList = redis.mget(idList);
 
         // 3. 拼接两个list 重组文章列表
         List<IndexArticleVO> indexArticleList = new ArrayList<>();
-        for (Article article : articleList) {
+        for (int i = 0; i < articleList.size(); i++) {
+            Article article = articleList.get(i);
             IndexArticleVO indexArticleVO = new IndexArticleVO();
             BeanUtils.copyProperties(article, indexArticleVO);
 
             // 3.1 从publisherList中获得发布者的基本信息
             AppUserVO publisher = publisherMap.get(article.getPublishUserId());
             indexArticleVO.setPublisherVO(publisher);
+
+            // 3.2 重新组装设置文章列表中的阅读量
+            String redisCountsStr = readCountsRedisList.get(i);
+            int readCounts = 0;
+            if (StringUtils.isNotBlank(redisCountsStr)) {
+                readCounts = Integer.parseInt(redisCountsStr);
+            }
+            indexArticleVO.setReadCounts(readCounts);
+
             indexArticleList.add(indexArticleVO);
         }
 
@@ -140,7 +176,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     /*
      * 发起远程调用 获得用户的基本信息
      */
-    private Map<String, AppUserVO> getPublisherList(Set<String> idSet) {
+    private Map<String, AppUserVO> getPublisherMap(Set<String> idSet) {
         String userServerUrlExecute = "http://user.news.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
         ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(userServerUrlExecute, NewsJSONResult.class);
         NewsJSONResult bodyResult = responseEntity.getBody();

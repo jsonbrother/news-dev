@@ -44,4 +44,14 @@ public class RedisConstant {
      * 当前用户的（我的）关注数
      */
     public static final String REDIS_MY_FOLLOW_COUNTS = "redis_my_follow_counts";
+
+    /**
+     * 文章阅读数
+     */
+    public static final String REDIS_ARTICLE_READ_COUNTS = "redis_article_read_counts";
+
+    /**
+     * 文章已读标志
+     */
+    public static final String REDIS_ALREADY_READ = "redis_already_read";
 }
