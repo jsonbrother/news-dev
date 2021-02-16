@@ -33,7 +33,7 @@ public class BaseController {
     protected RedisOperator redis;
 
     @Autowired
-    private RestTemplate restTemplate;
+    protected RestTemplate restTemplate;
 
     @Value("${website.domain-name}")
     private String domainName;

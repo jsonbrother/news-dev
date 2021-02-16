@@ -10,21 +10,26 @@ import com.enums.ResponseStatusEnum;
 import com.enums.YesOrNo;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
+import com.pojo.vo.ArticleDetailVO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
 import com.utils.JsonUtils;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.*;
 
 /**
  * @author Json
@@ -134,6 +139,15 @@ public class ArticleController extends BaseController implements ArticleControll
         // 2.保存到数据库 更改文章的状态为审核成功或者失败
         articleService.updateArticleStatus(articleId, pendingStatus);
 
+        // 3.审核成功 生成文章详情页静态html
+        if (pendingStatus.equals(ArticleReviewStatus.SUCCESS.type)) {
+            try {
+                createArticleHTML(articleId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         return NewsJSONResult.success();
     }
 
@@ -159,5 +173,46 @@ public class ArticleController extends BaseController implements ArticleControll
             }
         }
         return temp;
+    }
+
+    @Value("${freemarker.html.article}")
+    private String articlePath;
+
+    // 文章生成HTML
+    private void createArticleHTML(String articleId) throws Exception {
+        Configuration cfg = new Configuration(Configuration.getVersion());
+        String classpath = this.getClass().getResource("/").getPath();
+        cfg.setDirectoryForTemplateLoading(new File(classpath + "templates"));
+
+        Template template = cfg.getTemplate("detail.ftl", "utf-8");
+
+        // 获得文章的详情数据
+        ArticleDetailVO detailVO = getArticleDetail(articleId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("articleDetail", detailVO);
+
+        File tempDic = new File(articlePath);
+        if (!tempDic.exists()) {
+            tempDic.mkdirs();
+        }
+
+        String path = articlePath + File.separator + detailVO.getId() + ".html";
+
+        Writer out = new FileWriter(path);
+        template.process(map, out);
+        out.close();
+    }
+
+    // 发起远程调用rest，获得文章详情数据
+    private ArticleDetailVO getArticleDetail(String articleId) {
+        String url = "http://www.news.com:8001/portal/article/detail?articleId=" + articleId;
+        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(url, NewsJSONResult.class);
+        NewsJSONResult bodyResult = responseEntity.getBody();
+        ArticleDetailVO detailVO = null;
+        if (bodyResult != null && bodyResult.getStatus() == 200) {
+            String detailJson = JsonUtils.objectToJson(bodyResult.getData());
+            detailVO = JsonUtils.jsonToPojo(detailJson, ArticleDetailVO.class);
+        }
+        return detailVO;
     }
 }

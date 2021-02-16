@@ -41,6 +41,11 @@ spring:
     mongodb:
       uri: mongodb://news:news123@121.4.149.240:27017
       database: news-dev
+  freemarker:
+    charset: UTF-8
+    content-type: text/html
+    suffix: .ftl
+    template-loader-path: classpath:/templates/
 
 ############################################################
 #
@@ -61,3 +66,12 @@ mapper:
   mappers: com.my.mapper.MyMapper
   not-empty: false      # 在进行数据库操作的的时候，判断表达式 username != null, 是否追加 username != ''
   identity: MYSQL
+
+############################################################
+#
+# mybatis 配置
+#
+############################################################
+freemarker:
+  html:
+    article: E:\workspace\news-dev\freemarker

@@ -1,5 +1,7 @@
 package com.pojo.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -40,6 +42,7 @@ public class ArticleDetailVO {
     /**
      * 发布时间
      */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishTime;
 
     /**

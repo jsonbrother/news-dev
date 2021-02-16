@@ -22,7 +22,6 @@ com\api\interceptors\PassportInterceptor.class
 com\api\config\Swagger2.class
 com\api\interceptors\UserActiveInterceptor.class
 com\api\controller\article\CommentControllerApi.class
-com\api\controller\user\HelloControllerApi.class
 com\api\controller\user\PassportControllerApi.class
 com\api\controller\user\UserControllerApi.class
 com\api\interceptors\BaseInterceptor.class
