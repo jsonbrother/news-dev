@@ -1,18 +1,27 @@
 package com.api;
 
 import com.constant.CookieConstant;
+import com.pojo.vo.AppUserVO;
+import com.result.NewsJSONResult;
+import com.utils.JsonUtils;
 import com.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Json
@@ -22,6 +31,9 @@ public class BaseController {
 
     @Autowired
     protected RedisOperator redis;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Value("${website.domain-name}")
     private String domainName;
@@ -102,4 +114,24 @@ public class BaseController {
         }
         return Integer.valueOf(countsStr);
     }
+
+    /**
+     * 发起远程调用 获得用户的基本信息
+     *
+     * @param idSet 用户id集合
+     * @return 用户信息Map集合
+     */
+    protected Map<String, AppUserVO> getBasicUserMap(Set idSet) {
+        String userServerUrlExecute = "http://user.news.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(userServerUrlExecute, NewsJSONResult.class);
+        NewsJSONResult bodyResult = responseEntity.getBody();
+        List<AppUserVO> userVOList = null;
+        if (bodyResult != null && bodyResult.getStatus() == 200) {
+            String userJson = JsonUtils.objectToJson(bodyResult.getData());
+            userVOList = JsonUtils.jsonToList(userJson, AppUserVO.class);
+        }
+        assert userVOList != null;
+        return userVOList.stream().collect(Collectors.toMap(AppUserVO::getId, Function.identity(), (k1, k2) -> k2));
+    }
+
 }

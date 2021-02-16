@@ -103,7 +103,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
 
         Set<String> idSet = new HashSet<>();
         idSet.add(detailVO.getPublishUserId());
-        Map<String, AppUserVO> publisherMap = getPublisherMap(idSet);
+        Map<String, AppUserVO> publisherMap = getBasicUserMap(idSet);
 
         if (!publisherMap.isEmpty()) {
             detailVO.setPublishUserName(publisherMap.get(detailVO.getPublishUserId()).getNickName());
@@ -144,7 +144,7 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         logger.info("idSet:{}", idSet.toString());
 
         // 2.发起远程调用（restTemplate） 请求用户服务获得用户（idSet 发布者）的列表
-        Map<String, AppUserVO> publisherMap = getPublisherMap(idSet);
+        Map<String, AppUserVO> publisherMap = getBasicUserMap(idSet);
         // 发起redis的mget批量查询api，获得对应的值
         List<String> readCountsRedisList = redis.mget(idList);
 
@@ -171,23 +171,6 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         }
 
         gridResult.setRows(indexArticleList);
-    }
-
-    /*
-     * 发起远程调用 获得用户的基本信息
-     */
-    private Map<String, AppUserVO> getPublisherMap(Set<String> idSet) {
-        String userServerUrlExecute = "http://user.news.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
-        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(userServerUrlExecute, NewsJSONResult.class);
-        NewsJSONResult bodyResult = responseEntity.getBody();
-        List<AppUserVO> publisherList = null;
-        if (bodyResult != null && bodyResult.getStatus() == 200) {
-            String userJson = JsonUtils.objectToJson(bodyResult.getData());
-            publisherList = JsonUtils.jsonToList(userJson, AppUserVO.class);
-        }
-
-        assert publisherList != null;
-        return publisherList.stream().collect(Collectors.toMap(AppUserVO::getId, Function.identity(), (k1, k2) -> k2));
     }
 
 }

@@ -54,4 +54,9 @@ public class RedisConstant {
      * 文章已读标志
      */
     public static final String REDIS_ALREADY_READ = "redis_already_read";
+
+    /**
+     * 文章评论数
+     */
+    public static final String REDIS_ARTICLE_COMMENT_COUNTS = "redis_article_comment_counts";
 }

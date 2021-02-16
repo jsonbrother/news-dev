@@ -16,6 +16,7 @@ E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\interceptors
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\interceptors\UserTokenInterceptor.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\interceptors\UserActiveInterceptor.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\service\BaseService.java
+E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\controller\article\CommentControllerApi.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\InterceptorConfig.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\interceptors\ArticleReadInterceptor.java
 E:\idea project\news-dev\news-dev-service-api\src\main\java\com\api\config\CloudConfig.java

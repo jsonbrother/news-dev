@@ -12,36 +12,81 @@ public class IndexArticleVO {
 
     private String id;
 
+    /**
+     * 标题
+     */
     private String title;
 
+    /**
+     * 文章所属分类id
+     */
     private Integer categoryId;
 
+    /**
+     * 文章类型
+     */
     private Integer articleType;
 
+    /**
+     * 文章封面图
+     */
     private String articleCover;
 
+    /**
+     * 是否是预约定时发布的文章
+     */
     private Integer isAppoint;
 
+    /**
+     * 文章状态
+     */
     private Integer articleStatus;
 
+    /**
+     * 发布者用户id
+     */
     private String publishUserId;
 
+    /**
+     * 文章发布时间（也是预约发布的时间）
+     */
     private Date publishTime;
 
+    /**
+     * 用户累计点击阅读数（喜欢数）（点赞）
+     */
     private Integer readCounts;
 
+    /**
+     * 文章评论总数
+     */
     private Integer commentCounts;
 
     private String mongoFileId;
 
+    /**
+     * 逻辑删除状态
+     */
     private Integer isDelete;
 
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
+    /**
+     * 修改时间
+     */
     private Date updateTime;
 
+    /**
+     * 文章内容
+     */
     private String content;
 
+    /**
+     * 发布者信息
+     */
     private AppUserVO publisherVO;
 
     public String getId() {
