@@ -12,6 +12,9 @@
         <module>news-dev-common</module>
         <module>news-dev-service-api</module>
         <module>news-dev-service-user</module>
+        <module>news-dev-service-files</module>
+        <module>news-dev-service-admin</module>
+        <module>news-dev-service-article</module>
     </modules>
 
     <!--
@@ -27,7 +30,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.5.RELEASE</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <properties>
@@ -78,7 +81,7 @@
             <dependency>
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongodb-driver</artifactId>
-                    <!--3.11.1-->
+                <!--3.11.1-->
                 <version>${mongodb-driver.version}</version>
             </dependency>
 
