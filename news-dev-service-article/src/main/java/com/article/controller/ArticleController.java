@@ -203,7 +203,7 @@ public class ArticleController extends BaseController implements ArticleControll
         out.close();
     }
 
-    // 发起远程调用rest，获得文章详情数据
+    // 发起远程调用rest 获得文章详情数据
     private ArticleDetailVO getArticleDetail(String articleId) {
         String url = "http://www.news.com:8001/portal/article/detail?articleId=" + articleId;
         ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(url, NewsJSONResult.class);

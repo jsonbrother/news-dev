@@ -55,11 +55,11 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 // 文档页标题
-                .title("今日新闻·自媒体接口api")
+                .title("今日博客·自媒体接口api")
                 // 联系人信息
                 .contact(new Contact("today", "https://www.today.com", "abc@today.com"))
                 // 详细信息
-                .description("专为今日新闻·自媒体平台提供的api文档")
+                .description("专为今日博客·自媒体平台提供的api文档")
                 // 文档版本号
                 .version("1.0.1")
                 // 网站地址

@@ -75,6 +75,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         if (reviewTextResult.equalsIgnoreCase(ArticleReviewLevel.PASS.type)) {
             // 修改当前的文章，状态标记为审核通过
             this.updateArticleStatus(articleId, ArticleReviewStatus.SUCCESS.type);
+            // TODO 文章审核通过需要生成静态化页面
         } else if (reviewTextResult.equalsIgnoreCase(ArticleReviewLevel.REVIEW.type)) {
             // 修改当前的文章，状态标记为需要人工审核
             this.updateArticleStatus(articleId, ArticleReviewStatus.WAITING_MANUAL.type);

@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="imooc-words">
-                    <span class="imooc-num">慕课媒体号</span>
+                    <span class="imooc-num">博客媒体号</span>
                 </div>
 
                 <div class="share-title">
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="declare">
-                        免责声明：本平台所有内容仅供测试，且文章来自互联网，不代表慕课网的观点和立场，如有不妥，请联系后删除。
+                        免责声明：本平台所有内容仅供测试，且文章来自互联网，不代表博客网的观点和立场，如有不妥，请联系后删除。
                     </div>
                 </div>
 

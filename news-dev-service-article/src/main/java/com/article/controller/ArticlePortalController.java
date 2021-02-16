@@ -11,20 +11,15 @@ import com.pojo.vo.IndexArticleVO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
 import com.utils.IPUtil;
-import com.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Json
@@ -36,12 +31,10 @@ public class ArticlePortalController extends BaseController implements ArticlePo
     private static final Logger logger = LoggerFactory.getLogger(ArticlePortalController.class);
 
     private final ArticlePortalService articlePortalService;
-    private final RestTemplate restTemplate;
 
     @Autowired
-    public ArticlePortalController(ArticlePortalService articlePortalService, RestTemplate restTemplate) {
+    public ArticlePortalController(ArticlePortalService articlePortalService) {
         this.articlePortalService = articlePortalService;
-        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -112,6 +105,11 @@ public class ArticlePortalController extends BaseController implements ArticlePo
         detailVO.setReadCounts(getCountsFromRedis(RedisConstant.REDIS_ARTICLE_READ_COUNTS + ":" + articleId));
 
         return NewsJSONResult.success(detailVO);
+    }
+
+    @Override
+    public Integer readCounts(String articleId) {
+        return getCountsFromRedis(RedisConstant.REDIS_ARTICLE_READ_COUNTS + ":" + articleId);
     }
 
     @Override
