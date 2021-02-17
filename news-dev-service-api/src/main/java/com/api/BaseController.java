@@ -1,6 +1,7 @@
 package com.api;
 
 import com.constant.CookieConstant;
+import com.constant.RoutingConstant;
 import com.pojo.vo.AppUserVO;
 import com.result.NewsJSONResult;
 import com.utils.JsonUtils;
@@ -8,6 +9,7 @@ import com.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.client.RestTemplate;
@@ -122,11 +124,11 @@ public class BaseController {
      * @return 用户信息Map集合
      */
     protected Map<String, AppUserVO> getBasicUserMap(Set idSet) {
-        String userServerUrlExecute = "http://user.news.com:8003/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+        String userServerUrlExecute = RoutingConstant.USER_QUERY_BY_IDS + "?userIds=" + JsonUtils.objectToJson(idSet);
         ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(userServerUrlExecute, NewsJSONResult.class);
         NewsJSONResult bodyResult = responseEntity.getBody();
         List<AppUserVO> userVOList = null;
-        if (bodyResult != null && bodyResult.getStatus() == 200) {
+        if (bodyResult != null && bodyResult.getStatus() == HttpStatus.OK.value()) {
             String userJson = JsonUtils.objectToJson(bodyResult.getData());
             userVOList = JsonUtils.jsonToList(userJson, AppUserVO.class);
         }

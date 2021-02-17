@@ -4,10 +4,12 @@ import com.api.BaseController;
 import com.api.controller.article.ArticleControllerApi;
 import com.article.service.ArticleService;
 import com.constant.RedisConstant;
+import com.constant.RoutingConstant;
 import com.enums.ArticleCoverType;
 import com.enums.ArticleReviewStatus;
 import com.enums.ResponseStatusEnum;
 import com.enums.YesOrNo;
+import com.exception.NewsException;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
@@ -23,8 +25,10 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -146,11 +150,14 @@ public class ArticleController extends BaseController implements ArticleControll
         // 3.审核成功 生成文章详情页静态html
         if (pendingStatus.equals(ArticleReviewStatus.SUCCESS.type)) {
             try {
-                // 3.1获得静态化html在gridFs中的主键
+                // 3.1.获得静态化html在gridFs中的主键
                 String articleMongoId = createArticleHTMLToGridFS(articleId);
 
-                // 3.2存储到对应的文章 进行关联保存
+                // 3.2.存储到对应的文章 进行关联保存
                 articleService.updateArticleToGridFS(articleId, articleMongoId);
+
+                // 3.3.调用消费端 执行下载html
+                doDownloadArticleHTML(articleId, articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -203,16 +210,39 @@ public class ArticleController extends BaseController implements ArticleControll
         return fileId.toString();
     }
 
-    // 发起远程调用rest 获得文章详情数据
+    /**
+     * 发起远程调用rest 获得文章详情数据
+     */
     private ArticleDetailVO getArticleDetail(String articleId) {
-        String url = "http://www.news.com:8001/portal/article/detail?articleId=" + articleId;
+        String url = RoutingConstant.PORTAL_ARTICLE_DETAIL + "?articleId=" + articleId;
         ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(url, NewsJSONResult.class);
         NewsJSONResult bodyResult = responseEntity.getBody();
         ArticleDetailVO detailVO = null;
-        if (bodyResult != null && bodyResult.getStatus() == 200) {
+        if (bodyResult != null && bodyResult.getStatus() == HttpStatus.OK.value()) {
             String detailJson = JsonUtils.objectToJson(bodyResult.getData());
             detailVO = JsonUtils.jsonToPojo(detailJson, ArticleDetailVO.class);
         }
         return detailVO;
+    }
+
+    /**
+     * 发起远程调用rest 下载文章HTML
+     */
+    private void doDownloadArticleHTML(String articleId, String articleMongoId) {
+        String url = RoutingConstant.ARTICLE_MAKER_DOWNLOAD;
+
+        MultiValueMap<String, String> requestEntity = new LinkedMultiValueMap<>();
+        requestEntity.add("articleId", articleId);
+        requestEntity.add("articleMongoId", articleMongoId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        HttpEntity<MultiValueMap<String, String>> r = new HttpEntity<>(requestEntity, headers);
+
+        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.postForEntity(url, requestEntity, NewsJSONResult.class);
+        NewsJSONResult bodyResult = responseEntity.getBody();
+        if (bodyResult != null && bodyResult.getStatus() != HttpStatus.OK.value()) {
+            NewsException.display(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
+        }
     }
 }

@@ -21,6 +21,7 @@ com\constant\RedisConstant.class
 com\enums\UserStatus.class
 com\exception\FilesExceptionHandler.class
 org\n3r\idworker\strategy\DayPrefixRandomCodeStrategy.class
+com\constant\RoutingConstant.class
 org\n3r\idworker\InvalidSystemClock.class
 org\n3r\idworker\strategy\DefaultWorkerIdStrategy$2.class
 com\utils\FaceVerifyUtils.class

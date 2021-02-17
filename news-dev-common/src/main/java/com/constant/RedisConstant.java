@@ -1,8 +1,10 @@
 package com.constant;
 
 /**
- * Created by TongHaiJun
- * 2021/1/29 19:51
+ * redis key常量
+ *
+ * @author Json
+ * @date 2021/1/29 19:51
  */
 public class RedisConstant {
 

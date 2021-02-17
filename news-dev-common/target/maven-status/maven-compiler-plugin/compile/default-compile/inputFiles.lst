@@ -45,6 +45,7 @@ E:\ideaProject\news-dev\news-dev-common\src\main\java\org\n3r\idworker\IdWorker.
 E:\ideaProject\news-dev\news-dev-common\src\main\java\com\enums\FaceVerifyType.java
 E:\ideaProject\news-dev\news-dev-common\src\main\java\com\enums\ArticleReviewStatus.java
 E:\ideaProject\news-dev\news-dev-common\src\main\java\com\exception\FilesExceptionHandler.java
+E:\ideaProject\news-dev\news-dev-common\src\main\java\com\constant\RoutingConstant.java
 E:\ideaProject\news-dev\news-dev-common\src\main\java\com\utils\DesensitizationUtil.java
 E:\ideaProject\news-dev\news-dev-common\src\main\java\com\constant\RedisConstant.java
 E:\ideaProject\news-dev\news-dev-common\src\main\java\com\utils\JsonUtils.java
