@@ -34,6 +34,11 @@ public interface ArticleService {
     void updateArticleStatus(String articleId, Integer pendingStatus);
 
     /**
+     * 关联文章和gridFs的html文件id
+     */
+    void updateArticleToGridFS(String articleId, String articleMongoId);
+
+    /**
      * 管理员查询文章列表
      */
     PagedGridResult queryAllArticleListAdmin(Integer status, Integer page, Integer pageSize);

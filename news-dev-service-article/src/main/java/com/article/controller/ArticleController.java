@@ -8,6 +8,7 @@ import com.enums.ArticleCoverType;
 import com.enums.ArticleReviewStatus;
 import com.enums.ResponseStatusEnum;
 import com.enums.YesOrNo;
+import com.mongodb.client.gridfs.GridFSBucket;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
 import com.pojo.vo.ArticleDetailVO;
@@ -16,19 +17,20 @@ import com.result.PagedGridResult;
 import com.utils.JsonUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -41,10 +43,12 @@ public class ArticleController extends BaseController implements ArticleControll
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     private final ArticleService articleService;
+    private final GridFSBucket gridFSBucket;
 
     @Autowired
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleService articleService, GridFSBucket gridFSBucket) {
         this.articleService = articleService;
+        this.gridFSBucket = gridFSBucket;
     }
 
     @Override
@@ -142,7 +146,11 @@ public class ArticleController extends BaseController implements ArticleControll
         // 3.审核成功 生成文章详情页静态html
         if (pendingStatus.equals(ArticleReviewStatus.SUCCESS.type)) {
             try {
-                createArticleHTML(articleId);
+                // 3.1获得静态化html在gridFs中的主键
+                String articleMongoId = createArticleHTMLToGridFS(articleId);
+
+                // 3.2存储到对应的文章 进行关联保存
+                articleService.updateArticleToGridFS(articleId, articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -175,11 +183,8 @@ public class ArticleController extends BaseController implements ArticleControll
         return temp;
     }
 
-    @Value("${freemarker.html.article}")
-    private String articlePath;
-
-    // 文章生成HTML
-    private void createArticleHTML(String articleId) throws Exception {
+    // 文章生成HTML并存储到gridFs中
+    private String createArticleHTMLToGridFS(String articleId) throws Exception {
         Configuration cfg = new Configuration(Configuration.getVersion());
         String classpath = this.getClass().getResource("/").getPath();
         cfg.setDirectoryForTemplateLoading(new File(classpath + "templates"));
@@ -191,16 +196,11 @@ public class ArticleController extends BaseController implements ArticleControll
         Map<String, Object> map = new HashMap<>();
         map.put("articleDetail", detailVO);
 
-        File tempDic = new File(articlePath);
-        if (!tempDic.exists()) {
-            tempDic.mkdirs();
-        }
+        String htmlContent = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
 
-        String path = articlePath + File.separator + detailVO.getId() + ".html";
-
-        Writer out = new FileWriter(path);
-        template.process(map, out);
-        out.close();
+        InputStream inputStream = IOUtils.toInputStream(htmlContent);
+        ObjectId fileId = gridFSBucket.uploadFromStream(detailVO.getId() + ".html", inputStream);
+        return fileId.toString();
     }
 
     // 发起远程调用rest 获得文章详情数据

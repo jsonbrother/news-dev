@@ -142,6 +142,15 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
     }
 
+    @Transactional
+    @Override
+    public void updateArticleToGridFS(String articleId, String articleMongoId) {
+        Article pendingArticle = new Article();
+        pendingArticle.setId(articleId);
+        pendingArticle.setMongoFileId(articleMongoId);
+        articleMapper.updateByPrimaryKeySelective(pendingArticle);
+    }
+
     @Override
     public PagedGridResult queryAllArticleListAdmin(Integer status, Integer page, Integer pageSize) {
         Example articleExample = new Example(Article.class);

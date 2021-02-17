@@ -1,4 +1,4 @@
-package com.files.config;
+package com.api.config;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
