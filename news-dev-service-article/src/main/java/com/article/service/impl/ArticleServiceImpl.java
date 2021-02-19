@@ -40,7 +40,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     private final Sid sid;
     private final AliTextReviewUtils aliTextReviewUtils;
     private final GridFSBucket gridFSBucket;
-    public final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public ArticleServiceImpl(ArticleMapper articleMapper, Sid sid, AliTextReviewUtils aliTextReviewUtils,

@@ -6,6 +6,7 @@ com\api\config\CorsConfig.class
 com\api\controller\admin\CategoryMngControllerApi.class
 com\api\controller\article\ArticlePortalControllerApi.class
 com\api\config\PageInterceptorConfig.class
+com\api\config\RabbitMQConfig.class
 com\api\config\DateConverterConfig.class
 com\api\controller\user\UserMngControllerApi.class
 com\api\service\BaseService.class
