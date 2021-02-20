@@ -1,18 +1,20 @@
 package com.article.controller;
 
 import com.api.BaseController;
+import com.api.config.RabbitMQConfig;
 import com.api.controller.article.ArticleControllerApi;
 import com.article.service.ArticleService;
 import com.constant.RedisConstant;
 import com.constant.RoutingConstant;
+import com.constant.RoutingKeyConstant;
 import com.enums.ArticleCoverType;
 import com.enums.ArticleReviewStatus;
 import com.enums.ResponseStatusEnum;
 import com.enums.YesOrNo;
-import com.exception.NewsException;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
+import com.pojo.dto.ArticleDownloadDTO;
 import com.pojo.vo.ArticleDetailVO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
@@ -24,11 +26,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,11 +50,13 @@ public class ArticleController extends BaseController implements ArticleControll
 
     private final ArticleService articleService;
     private final GridFSBucket gridFSBucket;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public ArticleController(ArticleService articleService, GridFSBucket gridFSBucket) {
+    public ArticleController(ArticleService articleService, GridFSBucket gridFSBucket, RabbitTemplate rabbitTemplate) {
         this.articleService = articleService;
         this.gridFSBucket = gridFSBucket;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -156,8 +160,8 @@ public class ArticleController extends BaseController implements ArticleControll
                 // 3.2.存储到对应的文章 进行关联保存
                 articleService.updateArticleToGridFS(articleId, articleMongoId);
 
-                // 3.3.调用消费端 执行下载html
-                doDownloadArticleHTML(articleId, articleMongoId);
+                // 3.3.发送消息到MQ队列 让消费者监听并且执行下载html
+                doDownloadArticleHTMLByMQ(articleId, articleMongoId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -226,23 +230,13 @@ public class ArticleController extends BaseController implements ArticleControll
     }
 
     /**
-     * 发起远程调用rest 下载文章HTML
+     * 发送下载文章HTML的消息到MQ
      */
-    private void doDownloadArticleHTML(String articleId, String articleMongoId) {
-        String url = RoutingConstant.ARTICLE_MAKER_DOWNLOAD;
+    private void doDownloadArticleHTMLByMQ(String articleId, String articleMongoId) {
 
-        MultiValueMap<String, String> requestEntity = new LinkedMultiValueMap<>();
-        requestEntity.add("articleId", articleId);
-        requestEntity.add("articleMongoId", articleMongoId);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        HttpEntity<MultiValueMap<String, String>> r = new HttpEntity<>(requestEntity, headers);
-
-        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.postForEntity(url, requestEntity, NewsJSONResult.class);
-        NewsJSONResult bodyResult = responseEntity.getBody();
-        if (bodyResult != null && bodyResult.getStatus() != HttpStatus.OK.value()) {
-            NewsException.display(ResponseStatusEnum.ARTICLE_REVIEW_ERROR);
-        }
+        ArticleDownloadDTO downloadDTO = new ArticleDownloadDTO(articleId, articleMongoId);
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_ARTICLE,
+                RoutingKeyConstant.ARTICLE_DOWNLOAD_DO, JsonUtils.objectToJson(downloadDTO));
     }
+
 }

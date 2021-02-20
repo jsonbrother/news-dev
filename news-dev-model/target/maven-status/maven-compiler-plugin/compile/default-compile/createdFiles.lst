@@ -5,6 +5,7 @@ com\pojo\bo\NewAdminBO.class
 com\validate\CheckUrlValidate.class
 com\pojo\AppUser.class
 com\pojo\vo\AppUserVO.class
+com\pojo\dto\ArticleDownloadDTO.class
 com\pojo\vo\UserAccountInfoVO.class
 com\pojo\Comments.class
 com\pojo\AdminUser.class

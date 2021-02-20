@@ -1,9 +1,10 @@
 package com.article.service.impl;
 
+import com.api.config.RabbitMQConfig;
 import com.api.service.BaseService;
 import com.article.mapper.ArticleMapper;
 import com.article.service.ArticleService;
-import com.constant.RoutingConstant;
+import com.constant.RoutingKeyConstant;
 import com.enums.*;
 import com.exception.NewsException;
 import com.github.pagehelper.PageHelper;
@@ -11,16 +12,13 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.pojo.Article;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
-import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
-import com.utils.extend.AliTextReviewUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.n3r.idworker.Sid;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -38,18 +36,15 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     private final ArticleMapper articleMapper;
     private final Sid sid;
-    private final AliTextReviewUtils aliTextReviewUtils;
     private final GridFSBucket gridFSBucket;
-    private final RestTemplate restTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public ArticleServiceImpl(ArticleMapper articleMapper, Sid sid, AliTextReviewUtils aliTextReviewUtils,
-                              GridFSBucket gridFSBucket, RestTemplate restTemplate) {
-        this.articleMapper = articleMapper;
+    public ArticleServiceImpl(Sid sid, ArticleMapper articleMapper, GridFSBucket gridFSBucket, RabbitTemplate rabbitTemplate) {
         this.sid = sid;
-        this.aliTextReviewUtils = aliTextReviewUtils;
+        this.articleMapper = articleMapper;
         this.gridFSBucket = gridFSBucket;
-        this.restTemplate = restTemplate;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Transactional
@@ -217,7 +212,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
 
         // 删除消费端文章HTML
-        doDeleteArticleHTML(articleId);
+        doDeleteArticleHTMLByMQ(articleId);
     }
 
     /**
@@ -232,19 +227,14 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         gridFSBucket.delete(new ObjectId(articleMongoId));
 
         // 3. 删除消费端的HTML文件
-        doDeleteArticleHTML(articleId);
+        doDeleteArticleHTMLByMQ(articleId);
     }
 
     /**
-     * 删除消费端文章HTML
+     * 发送删除文章HTML的消息到MQ
      */
-    private void doDeleteArticleHTML(String articleId) {
-        String url = RoutingConstant.ARTICLE_MAKER_DELETE + "?articleId=" + articleId;
-        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(url, NewsJSONResult.class);
-        NewsJSONResult bodyResult = responseEntity.getBody();
-        if (bodyResult != null && bodyResult.getStatus() != HttpStatus.OK.value()) {
-            NewsException.display(ResponseStatusEnum.SYSTEM_OPERATION_ERROR);
-        }
+    private void doDeleteArticleHTMLByMQ(String articleId) {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_ARTICLE, RoutingKeyConstant.ARTICLE_DELETE_DO, articleId);
     }
 
 

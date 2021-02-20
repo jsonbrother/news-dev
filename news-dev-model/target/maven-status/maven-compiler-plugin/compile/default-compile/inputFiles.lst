@@ -20,6 +20,7 @@ E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\bo\CommentReplyBO.
 E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\bo\SaveCategoryBO.java
 E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\vo\UserAccountInfoVO.java
 E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\Category.java
+E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\dto\ArticleDownloadDTO.java
 E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\mo\FriendLinkMO.java
 E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\vo\RegionRatioVO.java
 E:\ideaProject\news-dev\news-dev-model\src\main\java\com\pojo\vo\FansCountsVO.java
