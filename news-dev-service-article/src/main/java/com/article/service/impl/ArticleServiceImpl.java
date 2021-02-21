@@ -1,6 +1,7 @@
 package com.article.service.impl;
 
 import com.api.config.RabbitMQConfig;
+import com.api.config.RabbitMQDelayConfig;
 import com.api.service.BaseService;
 import com.article.mapper.ArticleMapper;
 import com.article.service.ArticleService;
@@ -13,15 +14,19 @@ import com.pojo.Article;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
 import com.result.PagedGridResult;
+import com.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.n3r.idworker.Sid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -33,6 +38,8 @@ import java.util.List;
  */
 @Service
 public class ArticleServiceImpl extends BaseService implements ArticleService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
     private final ArticleMapper articleMapper;
     private final Sid sid;
@@ -76,6 +83,31 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
             NewsException.display(ResponseStatusEnum.ARTICLE_CREATE_ERROR);
         }
 
+        // 发送延迟消息到mq 计算定时发布时间和当前时间的时间差 则为往后延迟的时间
+        if (article.getIsAppoint().equals(ArticleAppointType.TIMING.type)) {
+            Date startDate = new Date();
+            Date endDate = article.getPublishTime();
+            logger.info("文章发布时间相差：{}", DateUtil.timeBetween(startDate, endDate));
+
+            // 计算消息延迟的时间
+            int delayTimes = (int) (endDate.getTime() - startDate.getTime());
+
+            MessagePostProcessor messagePostProcessor = message -> {
+                // 设置消息的持久
+                message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                // 设置消息延迟的时间 单位m毫秒
+                message.getMessageProperties().setDelay(delayTimes);
+                return message;
+            };
+
+            rabbitTemplate.convertAndSend(RabbitMQDelayConfig.EXCHANGE_DELAY,
+                    RoutingKeyConstant.PUBLISH_DELAY_DISPLAY,
+                    articleId,
+                    messagePostProcessor);
+
+            logger.info("延迟消息-定时发布文章{}:{}", articleId, new Date());
+        }
+
         // 通过阿里智能AI实现对文章文本的自动检测（自动审核）
         // String reviewTextResult = aliTextReviewUtils.reviewTextContent(newArticleBO.getContent());
         String reviewTextResult = ArticleReviewLevel.REVIEW.type;
@@ -96,6 +128,15 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     @Override
     public void updateAppointToPublish() {
         articleMapper.updateAppointToPublish();
+    }
+
+    @Transactional
+    @Override
+    public void updateArticleToPublish(String articleId) {
+        Article article = new Article();
+        article.setId(articleId);
+        article.setIsAppoint(ArticleAppointType.IMMEDIATELY.type);
+        articleMapper.updateByPrimaryKeySelective(article);
     }
 
     @Override

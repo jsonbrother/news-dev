@@ -52,7 +52,7 @@ public class DateUtil {
         return result.toString();
     }
 
-    protected static final float normalizedJulian(float jd) {
+    protected static float normalizedJulian(float jd) {
 
         float f = Math.round(jd + 0.5f) - 0.5f;
 
@@ -67,7 +67,7 @@ public class DateUtil {
      * @param JD the Julian date
      * @return the Gregorian date
      */
-    public static final Date toDate(float JD) {
+    public static Date toDate(float JD) {
 
         /* To convert a Julian Day Number to a Gregorian date, assume that it is for 0 hours, Greenwich time (so
          * that it ends in 0.5). Do the following calculations, again dropping the fractional part of all
@@ -116,7 +116,7 @@ public class DateUtil {
      * @param late  the "second date"
      * @return the days between the two dates
      */
-    public static final int daysBetween(Date early, Date late) {
+    public static int daysBetween(Date early, Date late) {
 
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
@@ -135,9 +135,34 @@ public class DateUtil {
      * @param late
      * @return the days between two dates.
      */
-    public static final int daysBetween(Calendar early, Calendar late) {
+    public static int daysBetween(Calendar early, Calendar late) {
 
         return (int) (toJulian(late) - toJulian(early));
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @param startDate 开始时间
+     * @param endDate   结束时间
+     * @return 时差
+     */
+    public static String timeBetween(Date startDate, Date endDate) {
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - startDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        return day + "天" + hour + "小时" + min + "分钟";
     }
 
     /**
@@ -149,7 +174,7 @@ public class DateUtil {
      * @param c a calendar instance
      * @return the julian day number
      */
-    public static final float toJulian(Calendar c) {
+    public static float toJulian(Calendar c) {
 
         int Y = c.get(Calendar.YEAR);
         int M = c.get(Calendar.MONTH);
@@ -173,7 +198,7 @@ public class DateUtil {
      * @param date
      * @return the julian day number
      */
-    public static final float toJulian(Date date) {
+    public static float toJulian(Date date) {
 
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -189,8 +214,8 @@ public class DateUtil {
      * @return
      * @throws ParseException
      */
-    public static final String dateIncrease(String isoString, String fmt,
-                                            int field, int amount) {
+    public static String dateIncrease(String isoString, String fmt,
+                                      int field, int amount) {
 
         try {
             Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone(
@@ -212,11 +237,9 @@ public class DateUtil {
      * @param isoString
      * @param field     the time field.
      * @param up        Indicates if rolling up or rolling down the field value.
-     * @param expanded  use formating char's
      * @throws ParseException if an unknown field value is given.
      */
-    public static final String roll(String isoString, String fmt, int field,
-                                    boolean up) throws ParseException {
+    public static String roll(String isoString, String fmt, int field, boolean up) throws ParseException {
 
         Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone(
                 "GMT"));
@@ -235,7 +258,7 @@ public class DateUtil {
      * @param up        Indicates if rolling up or rolling down the field value.
      * @throws ParseException if an unknown field value is given.
      */
-    public static final String roll(String isoString, int field, boolean up) throws
+    public static String roll(String isoString, int field, boolean up) throws
             ParseException {
 
         return roll(isoString, DATETIME_PATTERN, field, up);
@@ -249,11 +272,9 @@ public class DateUtil {
      * @param lenient
      * @return
      */
-    public static Date stringToDate(String dateText, String format,
-                                    boolean lenient) {
+    public static Date stringToDate(String dateText, String format, boolean lenient) {
 
         if (dateText == null) {
-
             return null;
         }
 
@@ -300,7 +321,7 @@ public class DateUtil {
     /**
      * java.util.Date
      *
-     * @param dateText
+     * @param dateString
      */
     public static Date stringToDate(String dateString) {
         return stringToDate(dateString, ISO_EXPANDED_DATE_FORMAT, LENIENT_DATE);

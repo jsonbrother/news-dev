@@ -21,4 +21,9 @@ public class RoutingKeyConstant {
      */
     public static final String ARTICLE_DELETE_DO = "article.delete.do";
 
+    /**
+     * 文章发布延时显示
+     */
+    public static final String PUBLISH_DELAY_DISPLAY = "publish.delay.display";
+
 }

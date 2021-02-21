@@ -6,31 +6,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 消息队列配置
+ * 延迟消息队列配置
  *
  * @author Json
- * @date 2021/2/19 0:37
+ * @date 2021/2/21 17:12
  */
 @Configuration
-public class RabbitMQConfig {
+public class RabbitMQDelayConfig {
 
     /**
      * 定义交换机的名字
      */
-    public static final String EXCHANGE_ARTICLE = "exchange_article";
+    public static final String EXCHANGE_DELAY = "exchange_delay";
 
     /**
      * 定义队列的名字
      */
-    public static final String QUEUE_DOWNLOAD_HTML = "queue_download_html";
+    public static final String QUEUE_DELAY = "queue_delay";
 
     /**
      * 创建交换机
      */
-    @Bean(EXCHANGE_ARTICLE)
+    @Bean(EXCHANGE_DELAY)
     public Exchange exchange() {
         return ExchangeBuilder
-                .topicExchange(EXCHANGE_ARTICLE)
+                .topicExchange(EXCHANGE_DELAY)
+                .delayed() // 支持消息延迟
                 .durable(true) // 开始持久化
                 .build();
     }
@@ -38,21 +39,21 @@ public class RabbitMQConfig {
     /**
      * 创建队列
      */
-    @Bean(QUEUE_DOWNLOAD_HTML)
+    @Bean(QUEUE_DELAY)
     public Queue queue() {
-        return new Queue(QUEUE_DOWNLOAD_HTML);
+        return new Queue(QUEUE_DELAY);
     }
 
     /**
      * 队列绑定交换机
      */
     @Bean
-    public Binding binding(@Qualifier(EXCHANGE_ARTICLE) Exchange exchange,
-                           @Qualifier(QUEUE_DOWNLOAD_HTML) Queue queue) {
+    public Binding delayBinding(@Qualifier(EXCHANGE_DELAY) Exchange exchange, @Qualifier(QUEUE_DELAY) Queue queue) {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)
-                .with("article.#.do")
-                .noargs();  // 执行绑定
+                .with("publish.delay.#")
+                .noargs();      // 执行绑定
     }
+
 }

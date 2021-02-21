@@ -25,5 +25,6 @@ com\api\config\Swagger2.class
 com\api\interceptors\UserActiveInterceptor.class
 com\api\controller\article\CommentControllerApi.class
 com\api\controller\user\PassportControllerApi.class
+com\api\config\RabbitMQDelayConfig.class
 com\api\controller\user\UserControllerApi.class
 com\api\interceptors\BaseInterceptor.class

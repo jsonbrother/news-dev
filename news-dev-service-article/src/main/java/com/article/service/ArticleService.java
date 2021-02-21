@@ -19,8 +19,15 @@ public interface ArticleService {
 
     /**
      * 更新定时发布为即时发布
+     * 放弃：定时器和全表扫描耗性能
      */
     void updateAppointToPublish();
+
+    /**
+     * 更新定时发布为即时发布
+     * 优化：RabbitMQ消费
+     */
+    void updateArticleToPublish(String articleId);
 
     /**
      * 用户中心 - 查询我的文章列表
