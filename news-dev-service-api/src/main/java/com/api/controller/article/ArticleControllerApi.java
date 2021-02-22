@@ -6,10 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -51,4 +48,8 @@ public interface ArticleControllerApi {
     @PostMapping("/withdraw")
     @ApiOperation(value = "用户撤回文章", notes = "用户撤回文章", httpMethod = "POST")
     NewsJSONResult withdraw(@RequestParam String userId, @RequestParam String articleId);
+
+    @GetMapping("/saveArticleMongoFileId")
+    @ApiOperation(value = "保存文章mongoFsId", notes = "保存文章mongoFsId", httpMethod = "GET")
+    NewsJSONResult saveArticleMongoFileId(@RequestParam String articleId, @RequestParam String mongoFileId);
 }

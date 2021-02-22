@@ -22,12 +22,8 @@ public class RoutingConstant {
     public static final String PORTAL_ARTICLE_DETAIL = "http://www.news.com:8001/portal/article/detail";
 
     /**
-     * 文章HTML下载
+     * 保存文章mongodbId
      */
-    public static final String ARTICLE_MAKER_DOWNLOAD = "http://maker.news.com:8002/article/maker/download";
+    public static final String SAVE_ARTICLE_MONGO_FILEID = "http://maker.news.com:8001/article/saveArticleMongoFileId";
 
-    /**
-     * 文章HTML删除
-     */
-    public static final String ARTICLE_MAKER_DELETE = "http://maker.news.com:8002/article/maker/delete";
 }

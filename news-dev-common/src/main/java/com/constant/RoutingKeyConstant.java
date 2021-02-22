@@ -12,6 +12,11 @@ public class RoutingKeyConstant {
     }
 
     /**
+     * 文章HTML生成消息
+     */
+    public static final String ARTICLE_GENERATE_DO = "article.generate.do";
+
+    /**
      * 文章HTML下载消息
      */
     public static final String ARTICLE_DOWNLOAD_DO = "article.download.do";

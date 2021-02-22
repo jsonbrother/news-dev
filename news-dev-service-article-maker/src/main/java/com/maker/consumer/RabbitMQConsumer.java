@@ -2,6 +2,8 @@ package com.maker.consumer;
 
 import com.api.config.RabbitMQConfig;
 import com.constant.RoutingKeyConstant;
+import com.enums.ResponseStatusEnum;
+import com.exception.NewsException;
 import com.maker.service.ArticleMakerService;
 import com.pojo.dto.ArticleDownloadDTO;
 import com.utils.JsonUtils;
@@ -28,25 +30,30 @@ public class RabbitMQConsumer {
         this.articleMakerService = articleMakerService;
     }
 
-    @RabbitListener(queues = {RabbitMQConfig.QUEUE_DOWNLOAD_HTML})
+    @RabbitListener(queues = {RabbitMQConfig.QUEUE_ARTICLE_HTML})
     public void watchQueue(String payload, Message message) {
         logger.info("payload:{}", payload);
 
         String routingKey = message.getMessageProperties().getReceivedRoutingKey();
-        if (routingKey.equalsIgnoreCase(RoutingKeyConstant.ARTICLE_DOWNLOAD_DO)) {
+        if (routingKey.equalsIgnoreCase(RoutingKeyConstant.ARTICLE_GENERATE_DO)) {
+
+            try {
+                articleMakerService.generate(payload);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (routingKey.equalsIgnoreCase(RoutingKeyConstant.ARTICLE_DOWNLOAD_DO)) {
+
             ArticleDownloadDTO downloadDTO = JsonUtils.jsonToPojo(payload, ArticleDownloadDTO.class);
             try {
                 assert downloadDTO != null;
-                articleMakerService.download(downloadDTO.getArticleId(), downloadDTO.getArticleMongoId());
+                articleMakerService.download(downloadDTO.getArticleId(), downloadDTO.getMongoFileId());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (routingKey.equalsIgnoreCase(RoutingKeyConstant.ARTICLE_DELETE_DO)) {
-            try {
-                articleMakerService.delete(payload);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            articleMakerService.delete(payload);
         } else {
             logger.info("不符合的规则:{}", routingKey);
         }

@@ -41,11 +41,6 @@ spring:
     mongodb:
       uri: mongodb://news:news123@121.4.149.240:27017
       database: news-dev
-  freemarker:
-    charset: UTF-8
-    content-type: text/html
-    suffix: .ftl
-    template-loader-path: classpath:/templates/
   rabbitmq:
     host: 121.4.149.240
     port: 5672

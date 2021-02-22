@@ -16,37 +16,37 @@ public class ArticleDownloadDTO {
     /**
      * 文章存储gridFs中的id
      */
-    private String articleMongoId;
+    private String MongoFileId;
 
     public ArticleDownloadDTO() {
+    }
+
+    public ArticleDownloadDTO(String articleId, String mongoFileId) {
+        this.articleId = articleId;
+        MongoFileId = mongoFileId;
     }
 
     public String getArticleId() {
         return articleId;
     }
 
-    public ArticleDownloadDTO(String articleId, String articleMongoId) {
-        this.articleId = articleId;
-        this.articleMongoId = articleMongoId;
-    }
-
     public void setArticleId(String articleId) {
         this.articleId = articleId;
     }
 
-    public String getArticleMongoId() {
-        return articleMongoId;
+    public String getMongoFileId() {
+        return MongoFileId;
     }
 
-    public void setArticleMongoId(String articleMongoId) {
-        this.articleMongoId = articleMongoId;
+    public void setMongoFileId(String mongoFileId) {
+        MongoFileId = mongoFileId;
     }
 
     @Override
     public String toString() {
         return "ArticleDownloadDTO{" +
                 "articleId='" + articleId + '\'' +
-                ", articleMongoId='" + articleMongoId + '\'' +
+                ", MongoFileId='" + MongoFileId + '\'' +
                 '}';
     }
 }

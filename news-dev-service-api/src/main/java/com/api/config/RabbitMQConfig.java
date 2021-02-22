@@ -22,7 +22,7 @@ public class RabbitMQConfig {
     /**
      * 定义队列的名字
      */
-    public static final String QUEUE_DOWNLOAD_HTML = "queue_download_html";
+    public static final String QUEUE_ARTICLE_HTML = "queue_article_html";
 
     /**
      * 创建交换机
@@ -38,9 +38,9 @@ public class RabbitMQConfig {
     /**
      * 创建队列
      */
-    @Bean(QUEUE_DOWNLOAD_HTML)
+    @Bean(QUEUE_ARTICLE_HTML)
     public Queue queue() {
-        return new Queue(QUEUE_DOWNLOAD_HTML);
+        return new Queue(QUEUE_ARTICLE_HTML);
     }
 
     /**
@@ -48,7 +48,7 @@ public class RabbitMQConfig {
      */
     @Bean
     public Binding binding(@Qualifier(EXCHANGE_ARTICLE) Exchange exchange,
-                           @Qualifier(QUEUE_DOWNLOAD_HTML) Queue queue) {
+                           @Qualifier(QUEUE_ARTICLE_HTML) Queue queue) {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)

@@ -5,7 +5,6 @@ import com.api.config.RabbitMQConfig;
 import com.api.controller.article.ArticleControllerApi;
 import com.article.service.ArticleService;
 import com.constant.RedisConstant;
-import com.constant.RoutingConstant;
 import com.constant.RoutingKeyConstant;
 import com.enums.ArticleCoverType;
 import com.enums.ArticleReviewStatus;
@@ -14,30 +13,22 @@ import com.enums.YesOrNo;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
-import com.pojo.dto.ArticleDownloadDTO;
-import com.pojo.vo.ArticleDetailVO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
 import com.utils.JsonUtils;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.io.InputStream;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Json
@@ -49,13 +40,11 @@ public class ArticleController extends BaseController implements ArticleControll
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     private final ArticleService articleService;
-    private final GridFSBucket gridFSBucket;
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public ArticleController(ArticleService articleService, GridFSBucket gridFSBucket, RabbitTemplate rabbitTemplate) {
+    public ArticleController(ArticleService articleService, RabbitTemplate rabbitTemplate) {
         this.articleService = articleService;
-        this.gridFSBucket = gridFSBucket;
         this.rabbitTemplate = rabbitTemplate;
     }
 
@@ -154,14 +143,9 @@ public class ArticleController extends BaseController implements ArticleControll
         // 3.审核成功 生成文章详情页静态html
         if (pendingStatus.equals(ArticleReviewStatus.SUCCESS.type)) {
             try {
-                // 3.1.获得静态化html在gridFs中的主键
-                String articleMongoId = createArticleHTMLToGridFS(articleId);
 
-                // 3.2.存储到对应的文章 进行关联保存
-                articleService.updateArticleToGridFS(articleId, articleMongoId);
-
-                // 3.3.发送消息到MQ队列 让消费者监听并且执行下载html
-                doDownloadArticleHTMLByMQ(articleId, articleMongoId);
+                // 3.1.发送消息到MQ队列 让消费者监听并且执行生成html
+                doGenerateArticleHTMLByMQ(articleId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -182,6 +166,12 @@ public class ArticleController extends BaseController implements ArticleControll
         return NewsJSONResult.success();
     }
 
+    @Override
+    public NewsJSONResult saveArticleMongoFileId(String articleId, String mongoFileId) {
+        articleService.updateArticleToGridFS(articleId, mongoFileId);
+        return NewsJSONResult.success();
+    }
+
     private Category getCategory(String allCatJson, Integer categoryId) {
         List<Category> catList = JsonUtils.jsonToList(allCatJson, Category.class);
         Category temp = null;
@@ -194,49 +184,13 @@ public class ArticleController extends BaseController implements ArticleControll
         return temp;
     }
 
-    // 文章生成HTML并存储到gridFs中
-    private String createArticleHTMLToGridFS(String articleId) throws Exception {
-        Configuration cfg = new Configuration(Configuration.getVersion());
-        String classpath = this.getClass().getResource("/").getPath();
-        cfg.setDirectoryForTemplateLoading(new File(classpath + "templates"));
-
-        Template template = cfg.getTemplate("detail.ftl", "utf-8");
-
-        // 获得文章的详情数据
-        ArticleDetailVO detailVO = getArticleDetail(articleId);
-        Map<String, Object> map = new HashMap<>();
-        map.put("articleDetail", detailVO);
-
-        String htmlContent = FreeMarkerTemplateUtils.processTemplateIntoString(template, map);
-
-        InputStream inputStream = IOUtils.toInputStream(htmlContent);
-        ObjectId fileId = gridFSBucket.uploadFromStream(detailVO.getId() + ".html", inputStream);
-        return fileId.toString();
-    }
-
-    /**
-     * 发起远程调用rest 获得文章详情数据
-     */
-    private ArticleDetailVO getArticleDetail(String articleId) {
-        String url = RoutingConstant.PORTAL_ARTICLE_DETAIL + "?articleId=" + articleId;
-        ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(url, NewsJSONResult.class);
-        NewsJSONResult bodyResult = responseEntity.getBody();
-        ArticleDetailVO detailVO = null;
-        if (bodyResult != null && bodyResult.getStatus() == HttpStatus.OK.value()) {
-            String detailJson = JsonUtils.objectToJson(bodyResult.getData());
-            detailVO = JsonUtils.jsonToPojo(detailJson, ArticleDetailVO.class);
-        }
-        return detailVO;
-    }
-
     /**
      * 发送下载文章HTML的消息到MQ
      */
-    private void doDownloadArticleHTMLByMQ(String articleId, String articleMongoId) {
+    private void doGenerateArticleHTMLByMQ(String articleId) {
 
-        ArticleDownloadDTO downloadDTO = new ArticleDownloadDTO(articleId, articleMongoId);
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_ARTICLE,
-                RoutingKeyConstant.ARTICLE_DOWNLOAD_DO, JsonUtils.objectToJson(downloadDTO));
+                RoutingKeyConstant.ARTICLE_GENERATE_DO, articleId);
     }
 
 }
