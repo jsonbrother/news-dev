@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "name": "file",
+      "type": "com.files.resource.FileResource",
+      "sourceType": "com.files.resource.FileResource"
+    }
+  ],
+  "properties": [
+    {
+      "name": "file.bucket-name",
+      "type": "java.lang.String",
+      "description": "阿里云OSS的Bucket名称",
+      "sourceType": "com.files.resource.FileResource"
+    },
+    {
+      "name": "file.endpoint",
+      "type": "java.lang.String",
+      "description": "阿里云OSS的外网访问",
+      "sourceType": "com.files.resource.FileResource"
+    },
+    {
+      "name": "file.host",
+      "type": "java.lang.String",
+      "description": "fastdfs访问地址",
+      "sourceType": "com.files.resource.FileResource"
+    },
+    {
+      "name": "file.object-name",
+      "type": "java.lang.String",
+      "description": "阿里云OSS的目录对象",
+      "sourceType": "com.files.resource.FileResource"
+    },
+    {
+      "name": "file.oss-host",
+      "type": "java.lang.String",
+      "description": "阿里云OSS的访问地址",
+      "sourceType": "com.files.resource.FileResource"
+    }
+  ],
+  "hints": []
+}

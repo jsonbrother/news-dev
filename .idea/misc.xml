@@ -5,6 +5,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/news-dev-service-files/pom.xml" />
+        <option value="$PROJECT_DIR$/news-dev-service-admin/pom.xml" />
+        <option value="$PROJECT_DIR$/news-dev-model/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
