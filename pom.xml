@@ -16,6 +16,7 @@
         <module>news-dev-service-admin</module>
         <module>news-dev-service-article</module>
         <module>news-dev-service-article-maker</module>
+        <module>springcloud-eureka</module>
     </modules>
 
     <!--
