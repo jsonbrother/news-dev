@@ -9,6 +9,8 @@ import com.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,7 +35,6 @@ public class BaseController {
 
     @Autowired
     protected RedisOperator redis;
-
     @Autowired
     protected RestTemplate restTemplate;
 
@@ -117,6 +118,10 @@ public class BaseController {
         return Integer.valueOf(countsStr);
     }
 
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
     /**
      * 发起远程调用 获得用户的基本信息
      *
@@ -124,7 +129,18 @@ public class BaseController {
      * @return 用户信息Map集合
      */
     protected Map<String, AppUserVO> getBasicUserMap(Set idSet) {
-        String userServerUrlExecute = RoutingConstant.USER_QUERY_BY_IDS + "?userIds=" + JsonUtils.objectToJson(idSet);
+        // String userServerUrlExecute = RoutingConstant.USER_QUERY_BY_IDS + "?userIds=" + JsonUtils.objectToJson(idSet);
+
+        String serviceId = "SERVICE-USER";
+        List<ServiceInstance> instanceList = discoveryClient.getInstances(serviceId);
+        ServiceInstance userService = instanceList.get(0);
+
+        String userServerUrlExecute
+                = "http://" + userService.getHost() +
+                ":"
+                + userService.getPort()
+                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+
         ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(userServerUrlExecute, NewsJSONResult.class);
         NewsJSONResult bodyResult = responseEntity.getBody();
         List<AppUserVO> userVOList = null;

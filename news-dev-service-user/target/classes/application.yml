@@ -62,3 +62,23 @@ mapper:
   mappers: com.my.mapper.MyMapper
   not-empty: false      # 在进行数据库操作的的时候，判断表达式 username != null, 是否追加 username != ''
   identity: MYSQL
+
+############################################################
+#
+# eureka client 配置信息
+#
+############################################################
+eureka:
+  # 自定义eureka server的信息
+  # server:
+  #   hostname: eureka
+  #   port: 7000
+  # 所有的微服务都必须要注册到eureka中
+  client:
+    # 是否要把当前的eureka server注册到自己
+    register-with-eureka: true
+    # 从注册中心获得检索服务实例 server没有必要 直接false即可
+    fetch-registry: true
+    # 注册中心的服务地址 高可用集群则配置多个地址
+    service-url:
+      defaultZone: http://eureka-cluster-7001:7001/eureka/,http://eureka-cluster-7002:7002/eureka/,http://eureka-cluster-7003:7003/eureka/
