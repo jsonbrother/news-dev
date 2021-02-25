@@ -23,7 +23,7 @@ public class CloudConfig {
      * 基于OKHttp3的配置来配置RestTemplate
      */
     @Bean
-    @LoadBalanced
+    @LoadBalanced // 默认负载均衡的算法:轮询
     public RestTemplate restTemplate() {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
     }
