@@ -119,9 +119,6 @@ public class BaseController {
     }
 
 
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
     /**
      * 发起远程调用 获得用户的基本信息
      *
@@ -132,14 +129,8 @@ public class BaseController {
         // String userServerUrlExecute = RoutingConstant.USER_QUERY_BY_IDS + "?userIds=" + JsonUtils.objectToJson(idSet);
 
         String serviceId = "SERVICE-USER";
-        List<ServiceInstance> instanceList = discoveryClient.getInstances(serviceId);
-        ServiceInstance userService = instanceList.get(0);
 
-        String userServerUrlExecute
-                = "http://" + userService.getHost() +
-                ":"
-                + userService.getPort()
-                + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
+        String userServerUrlExecute = "http://" + serviceId + "/user/queryByIds?userIds=" + JsonUtils.objectToJson(idSet);
 
         ResponseEntity<NewsJSONResult> responseEntity = restTemplate.getForEntity(userServerUrlExecute, NewsJSONResult.class);
         NewsJSONResult bodyResult = responseEntity.getBody();
