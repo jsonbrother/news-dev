@@ -28,3 +28,4 @@ com\api\controller\user\PassportControllerApi.class
 com\api\config\RabbitMQDelayConfig.class
 com\api\controller\user\UserControllerApi.class
 com\api\interceptors\BaseInterceptor.class
+com\api\config\MyServiceConfig.class

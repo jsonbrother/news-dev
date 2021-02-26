@@ -2,21 +2,28 @@ package com.article.controller;
 
 import com.api.BaseController;
 import com.api.controller.article.CommentControllerApi;
+import com.api.controller.user.UserControllerApi;
 import com.article.service.CommentPortalService;
 import com.constant.RedisConstant;
 import com.pojo.bo.CommentReplyBO;
+import com.pojo.vo.AppUserVO;
 import com.result.NewsJSONResult;
 import com.result.PagedGridResult;
+import com.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Json
@@ -28,10 +35,12 @@ public class CommentController extends BaseController implements CommentControll
     private final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     private final CommentPortalService commentPortalService;
+    private final UserControllerApi userControllerApi;
 
     @Autowired
-    public CommentController(CommentPortalService commentPortalService) {
+    public CommentController(CommentPortalService commentPortalService, UserControllerApi userControllerApi) {
         this.commentPortalService = commentPortalService;
+        this.userControllerApi = userControllerApi;
     }
 
     @Override
@@ -97,5 +106,23 @@ public class CommentController extends BaseController implements CommentControll
     public NewsJSONResult delete(String writerId, String commentId) {
         commentPortalService.deleteComment(writerId, commentId);
         return NewsJSONResult.success();
+    }
+
+    /**
+     * 发起远程调用 获得用户的基本信息
+     *
+     * @param idSet 用户id集合
+     * @return 用户信息Map集合
+     */
+    private Map<String, AppUserVO> getBasicUserMap(Set idSet) {
+        NewsJSONResult bodyResult = userControllerApi.queryByIds(JsonUtils.objectToJson(idSet));
+        List<AppUserVO> userVOList = null;
+        if (bodyResult != null && bodyResult.getStatus() == HttpStatus.OK.value()) {
+            String userJson = JsonUtils.objectToJson(bodyResult.getData());
+            userVOList = JsonUtils.jsonToList(userJson, AppUserVO.class);
+        }
+
+        assert userVOList != null;
+        return userVOList.stream().collect(Collectors.toMap(AppUserVO::getId, Function.identity(), (k1, k2) -> k2));
     }
 }
