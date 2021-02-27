@@ -10,7 +10,6 @@ import com.enums.ArticleCoverType;
 import com.enums.ArticleReviewStatus;
 import com.enums.ResponseStatusEnum;
 import com.enums.YesOrNo;
-import com.mongodb.client.gridfs.GridFSBucket;
 import com.pojo.Category;
 import com.pojo.bo.NewArticleBO;
 import com.result.NewsJSONResult;
@@ -21,13 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -49,15 +46,9 @@ public class ArticleController extends BaseController implements ArticleControll
     }
 
     @Override
-    public NewsJSONResult createArticle(@Valid NewArticleBO newArticleBO, BindingResult result) {
+    public NewsJSONResult createArticle(@Valid NewArticleBO newArticleBO) {
 
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            Map<String, String> map = getErrors(result);
-            return NewsJSONResult.errorMap(map);
-        }
-
-        // 2.判断文章封面类型 单图必填 纯文字则设置为空
+        // 1.判断文章封面类型 单图必填 纯文字则设置为空
         if (newArticleBO.getArticleType().equals(ArticleCoverType.ONE_IMAGE.type)) {
             if (StringUtils.isBlank(newArticleBO.getArticleCover())) {
                 return NewsJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_COVER_NOT_EXIST_ERROR);
@@ -66,7 +57,7 @@ public class ArticleController extends BaseController implements ArticleControll
             newArticleBO.setArticleCover("");
         }
 
-        // 3.判断分类id是否存在
+        // 2.判断分类id是否存在
         String allCatJson = redis.get(RedisConstant.REDIS_ALL_CATEGORY);
         if (StringUtils.isBlank(allCatJson)) {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.SYSTEM_OPERATION_ERROR);
@@ -76,7 +67,7 @@ public class ArticleController extends BaseController implements ArticleControll
             return NewsJSONResult.errorCustom(ResponseStatusEnum.ARTICLE_CATEGORY_NOT_EXIST_ERROR);
         }
 
-        // 4.发布文章
+        // 3.发布文章
         articleService.createArticle(newArticleBO, temp);
 
         return NewsJSONResult.success();

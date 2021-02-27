@@ -4,7 +4,6 @@ import com.pojo.bo.SaveFriendLinkBO;
 import com.result.NewsJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +18,7 @@ public interface FriendLinkControllerApi {
 
     @ApiOperation(value = "保存或修改友情链接", notes = "保存或修改友情链接", httpMethod = "POST")
     @PostMapping("/saveOrUpdateFriendLink")
-    NewsJSONResult saveOrUpdateFriendLink(@RequestBody @Valid SaveFriendLinkBO saveFriendLinkBO, BindingResult result);
+    NewsJSONResult saveOrUpdateFriendLink(@RequestBody @Valid SaveFriendLinkBO saveFriendLinkBO);
 
     @ApiOperation(value = "查询友情链接列表", notes = "查询友情链接列表", httpMethod = "POST")
     @PostMapping("/getFriendLinkList")

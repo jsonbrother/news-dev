@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -44,18 +43,12 @@ public class CommentController extends BaseController implements CommentControll
     }
 
     @Override
-    public NewsJSONResult createArticle(@Valid CommentReplyBO commentReplyBO, BindingResult result) {
+    public NewsJSONResult createArticle(@Valid CommentReplyBO commentReplyBO) {
 
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            Map<String, String> errorMap = getErrors(result);
-            return NewsJSONResult.errorMap(errorMap);
-        }
-
-        // 2.根据留言用户的id查询他的昵称 用于存入到数据表进行字段的冗余处理 从而避免多表关联查询的性能影响
+        // 1.根据留言用户的id查询他的昵称 用于存入到数据表进行字段的冗余处理 从而避免多表关联查询的性能影响
         String commentUserId = commentReplyBO.getCommentUserId();
 
-        // 2. 发起restTemplate调用用户服务，获得用户侧昵称
+        // 2. 发起restTemplate调用用户服务 获得用户侧昵称
         Set<String> idSet = new HashSet<>();
         idSet.add(commentUserId);
         String nickName = getBasicUserMap(idSet).get(commentUserId).getNickName();

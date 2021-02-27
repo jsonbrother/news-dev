@@ -9,22 +9,20 @@ import com.enums.ResponseStatusEnum;
 import com.enums.UserStatus;
 import com.pojo.AppUser;
 import com.pojo.bo.RegistLoginBO;
+import com.result.NewsJSONResult;
 import com.user.service.UserService;
 import com.utils.IPUtil;
-import com.result.NewsJSONResult;
 import com.utils.JsonUtils;
 import com.utils.SMSUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -68,18 +66,9 @@ public class PassportController extends BaseController implements PassportContro
     }
 
     @Override
-    public NewsJSONResult doLogin(@Valid RegistLoginBO registLoginBO,
-                                  BindingResult result,
-                                  HttpServletRequest request,
-                                  HttpServletResponse response) {
+    public NewsJSONResult doLogin(@Valid RegistLoginBO registLoginBO, HttpServletRequest request, HttpServletResponse response) {
 
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            Map<String, String> map = getErrors(result);
-            return NewsJSONResult.errorMap(map);
-        }
-
-        // 2.校验验证码是否匹配
+        // 1.校验验证码是否匹配
         String mobile = registLoginBO.getMobile();
         String smsCode = registLoginBO.getSmsCode();
 
@@ -88,7 +77,7 @@ public class PassportController extends BaseController implements PassportContro
             return NewsJSONResult.errorCustom(ResponseStatusEnum.SMS_CODE_ERROR);
         }
 
-        // 3.判断用户是否存在
+        // 2.判断用户是否存在
         AppUser appUser = userService.queryMobileIsExist(mobile);
         if (appUser != null && appUser.getActiveStatus().equals(UserStatus.FROZEN.type)) {
             // 如果用户不为空 并且状态为冻结
@@ -98,7 +87,7 @@ public class PassportController extends BaseController implements PassportContro
             appUser = userService.saveAppUser(mobile);
         }
 
-        // 4.保存用户会话的相关信息
+        // 3.保存用户会话的相关信息
         Integer userActiveStatus = appUser.getActiveStatus();
         if (!userActiveStatus.equals(UserStatus.FROZEN.type)) {
             // 保存token到redis
@@ -111,10 +100,10 @@ public class PassportController extends BaseController implements PassportContro
             setCookie(response, UserConstant.TOKEN, uToken, CookieConstant.COOKIE_EXPIRE);
         }
 
-        // 5.用户登陆或注册成功 需要删除redis中的短信验证码
+        // 4.用户登陆或注册成功 需要删除redis中的短信验证码
         redis.del(RedisConstant.MOBILE_SMSCODE + ":" + mobile);
 
-        // 6.返回用户的状态码
+        // 5.返回用户的状态码
         return NewsJSONResult.success(userActiveStatus);
     }
 

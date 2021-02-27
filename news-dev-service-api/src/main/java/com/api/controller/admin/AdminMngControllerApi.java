@@ -6,8 +6,10 @@ import com.result.NewsJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,7 +24,7 @@ public interface AdminMngControllerApi {
 
     @ApiOperation(value = "管理员登陆", notes = "管理员登陆", httpMethod = "POST")
     @PostMapping("/adminLogin")
-    NewsJSONResult adminLogin(@RequestBody @Valid AdminLoginBO adminLoginBO, BindingResult result, HttpServletResponse response);
+    NewsJSONResult adminLogin(@RequestBody @Valid AdminLoginBO adminLoginBO, HttpServletResponse response);
 
     @ApiOperation(value = "查询admin用户名是否存在", notes = "查询admin用户名是否存在", httpMethod = "POST")
     @PostMapping("/adminIsExist")
@@ -30,7 +32,7 @@ public interface AdminMngControllerApi {
 
     @ApiOperation(value = "创建admin", notes = "创建admin", httpMethod = "POST")
     @PostMapping("/addNewAdmin")
-    NewsJSONResult addNewAdmin(@RequestBody @Valid NewAdminBO newAdminBO, BindingResult result);
+    NewsJSONResult addNewAdmin(@RequestBody @Valid NewAdminBO newAdminBO);
 
     @ApiOperation(value = "查询admin列表", notes = "查询admin列表", httpMethod = "POST")
     @PostMapping("/getAdminList")

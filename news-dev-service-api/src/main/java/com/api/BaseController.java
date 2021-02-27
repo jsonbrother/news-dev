@@ -5,15 +5,12 @@ import com.utils.RedisOperator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Json
@@ -33,23 +30,6 @@ public class BaseController {
 
     protected static final Integer COMMON_START_PAGE = 1;
     protected static final Integer COMMON_PAGE_SIZE = 10;
-
-    /**
-     * 获取BO中的错误信息
-     */
-    protected Map<String, String> getErrors(BindingResult result) {
-        Map<String, String> map = new HashMap<>();
-
-        result.getFieldErrors().forEach(error -> {
-            // 发送验证错误时间所对应的属性
-            String field = error.getField();
-            // 验证的错误信息
-            String msg = error.getDefaultMessage();
-            map.put(field, msg);
-        });
-
-        return map;
-    }
 
     /**
      * 设置cookie value编码utf-8

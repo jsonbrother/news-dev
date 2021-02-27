@@ -5,7 +5,6 @@ import com.result.NewsJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,7 +19,7 @@ public interface CommentControllerApi {
 
     @PostMapping("/createComment")
     @ApiOperation(value = "用户评论", notes = "用户评论", httpMethod = "POST")
-    NewsJSONResult createArticle(@RequestBody @Valid CommentReplyBO commentReplyBO, BindingResult result);
+    NewsJSONResult createArticle(@RequestBody @Valid CommentReplyBO commentReplyBO);
 
     @GetMapping("/counts")
     @ApiOperation(value = "用户评论数查询", notes = "用户评论数查询", httpMethod = "GET")

@@ -12,11 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @author Json
@@ -36,21 +34,15 @@ public class FriendLinkController extends BaseController implements FriendLinkCo
 
 
     @Override
-    public NewsJSONResult saveOrUpdateFriendLink(SaveFriendLinkBO saveFriendLinkBO, BindingResult result) {
+    public NewsJSONResult saveOrUpdateFriendLink(SaveFriendLinkBO saveFriendLinkBO) {
 
-        // 1.判断请求参数
-        if (result.hasErrors()) {
-            Map<String, String> map = getErrors(result);
-            return NewsJSONResult.errorMap(map);
-        }
-
-        // 2.对象转换MO
+        // 1.对象转换MO
         FriendLinkMO friendLinkMO = new FriendLinkMO();
         BeanUtils.copyProperties(saveFriendLinkBO, friendLinkMO);
         friendLinkMO.setCreateTime(new Date());
         friendLinkMO.setUpdateTime(new Date());
 
-        // 3.保存mongoDB
+        // 2.保存mongoDB
         friendLinkService.saveOrUpdateFriendLink(friendLinkMO);
 
         return NewsJSONResult.success();

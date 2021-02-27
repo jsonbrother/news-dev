@@ -14,13 +14,10 @@ import com.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -78,18 +75,12 @@ public class UserController extends BaseController implements UserControllerApi 
     }
 
     @Override
-    public NewsJSONResult updateUserInfo(@Valid UpdateUserInfoBO updateUserInfoBO, BindingResult result) {
+    public NewsJSONResult updateUserInfo(@Valid UpdateUserInfoBO updateUserInfoBO) {
 
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            Map<String, String> map = getErrors(result);
-            return NewsJSONResult.errorMap(map);
-        }
-
-        // 2.执行更新操作
+        // 1.执行更新操作
         userService.updateAppUserInfo(updateUserInfoBO);
 
-        // 3.返回执行结果
+        // 2.返回执行结果
         return NewsJSONResult.success();
     }
 

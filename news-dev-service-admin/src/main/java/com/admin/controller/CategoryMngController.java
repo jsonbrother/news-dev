@@ -10,12 +10,10 @@ import com.pojo.bo.SaveCategoryBO;
 import com.result.NewsJSONResult;
 import com.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -39,16 +37,11 @@ public class CategoryMngController extends BaseController implements CategoryMng
 
 
     @Override
-    public NewsJSONResult saveOrUpdateCategory(@Valid SaveCategoryBO newCategoryBO, BindingResult result) {
-
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            return NewsJSONResult.errorMap(getErrors(result));
-        }
-
+    public NewsJSONResult saveOrUpdateCategory(@Valid SaveCategoryBO newCategoryBO) {
         Category category = new Category();
         BeanUtils.copyProperties(newCategoryBO, category);
-        // 2.id为空新增 不为空修改
+
+        // 1.id为空新增 不为空修改
         if (newCategoryBO.getId() == null) {
             // 查询新增的分类名称不能重复存在
             boolean isExist = categoryService.queryCatIsExist(category.getName(), null);

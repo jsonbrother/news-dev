@@ -21,12 +21,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -50,18 +48,12 @@ public class AdminMngController extends BaseController implements AdminMngContro
     }
 
     @Override
-    public NewsJSONResult adminLogin(AdminLoginBO adminLoginBO, BindingResult result, HttpServletResponse response) {
+    public NewsJSONResult adminLogin(AdminLoginBO adminLoginBO, HttpServletResponse response) {
 
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            Map<String, String> map = getErrors(result);
-            return NewsJSONResult.errorMap(map);
-        }
-
-        // 2.查询admin用户的信息
+        // 1.查询admin用户的信息
         AdminUser adminUser = adminUserService.queryAdminByUsername(adminLoginBO.getUsername());
 
-        // 3.判断登陆信息
+        // 2.判断登陆信息
         if (adminUser == null) {
             return NewsJSONResult.errorCustom(ResponseStatusEnum.ADMIN_NOT_EXIT_ERROR);
         }
@@ -85,15 +77,9 @@ public class AdminMngController extends BaseController implements AdminMngContro
     }
 
     @Override
-    public NewsJSONResult addNewAdmin(NewAdminBO newAdminBO, BindingResult result) {
+    public NewsJSONResult addNewAdmin(NewAdminBO newAdminBO) {
 
-        // 1.判断BindingResult中是否保存了错误的验证信息
-        if (result.hasErrors()) {
-            Map<String, String> map = getErrors(result);
-            return NewsJSONResult.errorMap(map);
-        }
-
-        // 2.img64不为空 则代表人脸入库 否则需要哦用户输入密码和确认密码
+        // 1.img64不为空 则代表人脸入库 否则需要哦用户输入密码和确认密码
         if (StringUtils.isBlank(newAdminBO.getImg64())) {
             if (StringUtils.isBlank(newAdminBO.getPassword()) ||
                     StringUtils.isBlank(newAdminBO.getConfirmPassword())
@@ -102,7 +88,7 @@ public class AdminMngController extends BaseController implements AdminMngContro
             }
         }
 
-        // 3.密码不为空 则必须判断两次输入一致
+        // 2.密码不为空 则必须判断两次输入一致
         if (StringUtils.isNotBlank(newAdminBO.getPassword())) {
             if (!newAdminBO.getPassword()
                     .equalsIgnoreCase(newAdminBO.getConfirmPassword())) {
@@ -110,10 +96,10 @@ public class AdminMngController extends BaseController implements AdminMngContro
             }
         }
 
-        // 4.校验用户名唯一
+        // 3.校验用户名唯一
         checkAdminExist(newAdminBO.getUsername());
 
-        // 5.添加新的管理员
+        // 4.添加新的管理员
         adminUserService.saveAdminUser(newAdminBO);
 
         return NewsJSONResult.success();

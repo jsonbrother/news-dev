@@ -5,7 +5,6 @@ import com.result.NewsJSONResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,7 +20,7 @@ public interface ArticleControllerApi {
 
     @ApiOperation(value = "用户发表文章", notes = "用户发表文章", httpMethod = "POST")
     @PostMapping("/createArticle")
-    NewsJSONResult createArticle(@RequestBody @Valid NewArticleBO newArticleBO, BindingResult result);
+    NewsJSONResult createArticle(@RequestBody @Valid NewArticleBO newArticleBO);
 
     @PostMapping("/queryMyList")
     @ApiOperation(value = "查询用户的所有文章列表", notes = "查询用户的所有文章列表", httpMethod = "POST")
